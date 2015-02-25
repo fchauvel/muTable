@@ -1,0 +1,24 @@
+
+buildscript {
+    repositories {
+        jcenter()
+    }   
+    
+    dependencies {
+        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
+    }
+}
+
+version = '0.1-SNAPSHOT'
+
+sourceCompatibility = '1.8' 
+
+license {
+    header project.file('src/license_header.txt')
+    strictCheck true
+    ext.years = '2015'
+    ext.name = 'Franck Chauvel'
+    ext.email = 'franck.chauvel@gmail.com'
+}
+
+

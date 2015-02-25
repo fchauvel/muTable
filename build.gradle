@@ -1,0 +1,43 @@
+buildscript {
+    repositories {
+        jcenter()
+    }   
+    
+    dependencies {
+        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
+    }
+}
+
+allprojects {
+    
+    group = 'org.mutable'
+    
+    apply plugin: 'java'
+    apply plugin: 'java'
+    apply plugin: 'findbugs'
+    apply plugin: 'pmd'
+    apply plugin: 'jacoco'
+    apply plugin: 'license'
+
+    
+    repositories {
+        jcenter()
+    }
+     
+    dependencies {
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+    }
+    
+    tasks.withType(FindBugs) {
+        reports {
+            xml.enabled = false
+            html.enabled = true
+        }
+    }
+}
+
+project(':sample') {
+    dependencies {
+        compile project(':library')
+    }
+}
