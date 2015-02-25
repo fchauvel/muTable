@@ -13,9 +13,7 @@ structure, which fasten the assembly small numerical experiments. The
 aims of µTable is to bring the same in Java. See the example below:
 
 ```java
-CSVReader csv = new CSVReader();
-
-Table table = csv.read("employee.csv");
+Table table = Table.read("employee.csv");
 for(Row eachRow: table.where(field("isMarried").is(value(false)))) {
 	System.out.println(eachRow.getField("name"));
 }
