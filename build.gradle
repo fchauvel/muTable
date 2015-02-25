@@ -41,3 +41,7 @@ project(':sample') {
         compile project(':library')
     }
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2.1'
+}

@@ -1,4 +1,5 @@
+
+# Gradle
 .gradle
 build/
-
 .nb-gradle
