@@ -13,10 +13,9 @@ allprojects {
     group = 'org.mutable'
     
     apply plugin: 'java'
-    apply plugin: 'java'
+    apply plugin: 'jacoco'
     apply plugin: 'findbugs'
     apply plugin: 'pmd'
-    apply plugin: 'jacoco'
     apply plugin: 'license'
 
     
@@ -34,6 +33,7 @@ allprojects {
             html.enabled = true
         }
     }
+    
 }
 
 project(':sample') {

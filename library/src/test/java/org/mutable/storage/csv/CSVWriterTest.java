@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with MuTable.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.mutable.writer;
+package org.mutable.storage.csv;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
@@ -29,6 +29,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mutable.Samples;
 import org.mutable.Table;
+import org.mutable.storage.Writer;
 
 @RunWith(JUnit4.class)
 public class CSVWriterTest {

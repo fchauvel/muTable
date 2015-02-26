@@ -16,14 +16,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with MuTable.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.mutable.reader;
 
-import java.io.BufferedReader;
+package org.mutable.storage; 
+
+import java.io.BufferedReader; 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -40,7 +36,7 @@ import java.util.concurrent.TimeoutException;
  * Utility class that read line on an input stream, without blocking
  * indefinitely on a 'readline'.
  */
-class TimedOutLineReader {
+public class TimedOutLineReader {
 
     public static final long DEFAULT_READING_TIMEOUT = 1000L;
     private final ExecutorService executor;
@@ -49,6 +45,7 @@ class TimedOutLineReader {
     private String buffer;
     private int lineCounter;
 
+    
     public TimedOutLineReader(InputStream input) {
         this(input, DEFAULT_READING_TIMEOUT);
     }

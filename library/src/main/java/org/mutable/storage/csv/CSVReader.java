@@ -16,8 +16,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with MuTable.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.mutable.reader;
+package org.mutable.storage.csv;
 
+import org.mutable.storage.ReaderException;
+import org.mutable.storage.TimedOutLineReader;
+import org.mutable.storage.Reader;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;

@@ -19,19 +19,32 @@
 
 package org.mutable.storage;
 
-import java.io.OutputStream;
+import java.io.InputStream;
+import java.util.List;
 import org.mutable.Table;
+import org.mutable.storage.csv.CSVFormat;
 
 /**
- * Behavior of the writer object
+ *
  */
-public interface Writer {
+public class FakeFormat extends CSVFormat {
+
+    private boolean wasCalled;
+
+    public FakeFormat() {
+        wasCalled = false;
+    }
     
-    /**
-     * Write the given table on the selected output stream
-     * @param table the table to write
-     * @param output the output stream where the table shall be serialized
-     */
-    void write(Table table, OutputStream output);
+    public boolean wasCalled() {
+        return wasCalled;
+    }
+
+    @Override
+    public Table read(InputStream input, long timeout) {
+        wasCalled = true;
+        return null;
+    }
+    
+    
     
 }

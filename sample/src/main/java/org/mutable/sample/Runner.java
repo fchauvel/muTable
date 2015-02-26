@@ -31,7 +31,7 @@ import static org.mutable.SchemaBuilder.aSchema;
 import org.mutable.Table;
 import static org.mutable.expression.FieldReference.field;
 import static org.mutable.expression.Literal.value;
-import org.mutable.writer.CSVWriter;
+import org.mutable.storage.csv.CSVWriter;
 
 /**
  * A sample application using the muTable library

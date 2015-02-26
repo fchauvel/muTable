@@ -17,8 +17,9 @@
  * along with MuTable.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mutable.writer;
+package org.mutable.storage.csv;
 
+import org.mutable.storage.Writer;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;

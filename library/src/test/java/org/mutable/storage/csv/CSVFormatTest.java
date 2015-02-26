@@ -17,21 +17,32 @@
  * along with MuTable.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mutable.storage;
+package org.mutable.storage.csv;
 
-import java.io.OutputStream;
-import org.mutable.Table;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-/**
- * Behavior of the writer object
- */
-public interface Writer {
+
+@RunWith(JUnit4.class)
+public class CSVFormatTest {
     
-    /**
-     * Write the given table on the selected output stream
-     * @param table the table to write
-     * @param output the output stream where the table shall be serialized
-     */
-    void write(Table table, OutputStream output);
+    @Test
+    public void shouldProvideAListOfFileExtensions() {
+        CSVFormat csv = new CSVFormat();
+        
+        assertThat(csv.getFileExtensions(), hasItems("csv", "tsv"));
+    }
+   
+     
+    @Test
+    public void shouldTellWhetherAnExtensionIsValid() {
+        CSVFormat csv = new CSVFormat();
+        
+        assertThat(csv.hasExtension("csv"), is(true));
+    }
     
 }

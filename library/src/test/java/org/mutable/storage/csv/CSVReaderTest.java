@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with MuTable.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.mutable.reader;
+package org.mutable.storage.csv;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -32,14 +32,16 @@ import org.mutable.Field;
 import static org.mutable.FieldType.*;
 import org.mutable.Schema;
 import org.mutable.DataTable;
-import static org.mutable.reader.CSVReader.WITHOUT_HEADER;
-import static org.mutable.reader.CSVReader.WITH_HEADER;
+import org.mutable.storage.ReaderException;
+import static org.mutable.storage.csv.CSVReader.WITHOUT_HEADER;
+import static org.mutable.storage.csv.CSVReader.WITH_HEADER;
 
 
 @RunWith(JUnit4.class)
 public class CSVReaderTest {
 
     // TODO: Handle missing values
+    // TODO: Factor out CSV snippets
     
     @Test
     public void shouldReadSimpleCSVSnippetWithoutHeaders() throws ReaderException {
