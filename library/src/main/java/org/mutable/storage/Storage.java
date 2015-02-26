@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with MuTable. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.mutable.storage;
 
 import java.io.IOException;
@@ -33,7 +34,13 @@ public class Storage {
 
     private static final List<Format> DEFAULT_SUPPORTED_FORMATS = Arrays.asList(new CSVFormat());
 
-    // TODO: Storage should permit to pass parameters to reader in order specify options, such as headers for instance
+    /**
+     * @return a new instance of storage, for the fluent interface API
+     */
+    public static Storage storage() {
+        return new Storage();
+    }
+    
     private final List<Format> supportedFormats;
 
     public Storage() {
@@ -56,24 +63,53 @@ public class Storage {
      * @param location the location of the data to read
      * @throws ReaderException if some error occurs while reading the data
      */
-    public Table fetch(URL location) throws ReaderException {
-        return fetch(location, TimedOutLineReader.DEFAULT_READING_TIMEOUT);
+    public Table fetch(String location) throws ReaderException {
+        return fetch(
+                location,
+                TimedOutLineReader.DEFAULT_READING_TIMEOUT);
     }
 
-    public Table fetch(URL location, long timeout) throws ReaderException {
-        requireValidUrl(location);
-        Format format = selectFormat(getFileExtension(location));
-        return fetch(location, format, timeout);
+    /**
+     * @return the table read for the content available at the given location
+     * @param location the URL of the table to fetch
+     * @param timeout the time to wait
+     * @throws ReaderException 
+     */
+    public Table fetch(String location, long timeout) throws ReaderException {
+        return fetch(
+                location, 
+                selectFormat(getFileExtension(location)), 
+                timeout);
     }
 
-    public Table fetch(URL location, Format format, long timeout) throws ReaderException {
-        return fetch(location, format, format.getDefaultOptions(), timeout);
+    /**
+     * @return a table containing the data available at the given location
+     * @param location the URL of the table to fetch
+     * @param format the format which is expected
+     * @param timeout the time to wait
+     * @throws ReaderException when some I/O errors occurs
+     */
+    public Table fetch(String location, Format format, long timeout) throws ReaderException {
+        return fetch(
+                location, 
+                format, 
+                format.getDefaultOptions(), 
+                timeout);
     }
 
-    public Table fetch(URL location, Options options, long timeout) throws ReaderException {
-        requireValidUrl(location);
-        Format format = selectFormat(getFileExtension(location));
-        return fetch(location, format, options, timeout);
+    /**
+     * @return a table containing the data available at the given location
+     * @param location the URL of the table to fetch
+     * @param options the options that govern the read operation
+     * @param timeout the time to wait
+     * @throws ReaderException when some I/O errors occurs
+     */
+    public Table fetch(String location, Options options, long timeout) throws ReaderException {
+        return fetch(
+                location, 
+                selectFormat(getFileExtension(location)), 
+                options, 
+                timeout);
     }
 
     /**
@@ -84,19 +120,22 @@ public class Storage {
      * @param timeout the time to wait
      * @throws ReaderException when some I/O errors occurs
      */
-    public Table fetch(URL location, Format format, Options options, long timeout) throws ReaderException {
+    public Table fetch(String location, Format format, Options options, long timeout) throws ReaderException {
         try {
             return format.read(getStream(location), options, timeout);
 
         } catch (IOException ex) {
-            throw new ReaderException("Unable to open the url '" + location.toString() + "'", ex);
+            throw new ReaderException("Unable to open the location '" + location + "'", ex);
         }
     }
 
 
-    private void requireValidUrl(URL location) throws IllegalArgumentException {
+    private void requireValidUrl(String location) throws IllegalArgumentException {
         if (location == null) {
-            throw new IllegalArgumentException("Invalid URL ('null' found)");
+            throw new IllegalArgumentException("Invalid location ('null' found)");
+        }
+        if (location.isEmpty()) {
+            throw new IllegalArgumentException("Invalid location ('' found)");
         }
     }
 
@@ -107,8 +146,8 @@ public class Storage {
      * @param location the URL whose input stream is needed
      * @return an input stream to the content of URL
      */
-    protected InputStream getStream(URL location) throws IOException {
-        return location.openStream();
+    protected InputStream getStream(String location) throws IOException {
+        return new URL(location).openStream();
     }
 
     /**
@@ -129,7 +168,7 @@ public class Storage {
      * @return the list of supported file extensions
      */
     private List<String> supportedFileExtensions() {
-        List<String> extensions = new ArrayList<>();
+        final List<String> extensions = new ArrayList<>();
         for (Format eachFormat : supportedFormats) {
             extensions.addAll(eachFormat.getFileExtensions());
         }
@@ -140,10 +179,10 @@ public class Storage {
      * @return the file extension in that URL
      * @param location the URL whose file extension is needed
      */
-    private String getFileExtension(URL location) throws IllegalArgumentException {
-        String urlText = location.toString();
-        int lastDotIndex = urlText.lastIndexOf('.');
-        return urlText.substring(lastDotIndex + 1, urlText.length());
+    private String getFileExtension(String location) throws IllegalArgumentException {
+        requireValidUrl(location);
+        int lastDotIndex = location.lastIndexOf('.');
+        return location.substring(lastDotIndex + 1, location.length());
     }
 
 }

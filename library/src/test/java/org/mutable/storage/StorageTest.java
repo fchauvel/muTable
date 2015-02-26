@@ -22,7 +22,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +47,7 @@ public class StorageTest {
     @Test(expected = IllegalArgumentException.class)
     public void shouldRejectNullURLs() throws ReaderException {
         Storage storage = new Storage();
-        URL location = null;
+        String location = null;
         storage.fetch(location);
     }
 
@@ -56,28 +55,28 @@ public class StorageTest {
     public void shouldRejectURLWithoutExtension() throws MalformedURLException, ReaderException {
         final FakeFormat csv = new FakeFormat();
         Storage storage = new Storage(Arrays.asList(csv));
-        storage.fetch(new URL("http://foo.com/bar"));
+        storage.fetch("http://foo.com/bar");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldRejectInvalidExtension() throws MalformedURLException, ReaderException {
         final FakeFormat csv = new FakeFormat();
         Storage storage = new Storage(Arrays.asList(csv));
-        storage.fetch(new URL("http://foocom/bar"));
+        storage.fetch("http://foocom/bar");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldRejectURLWithUnknownExtension() throws MalformedURLException, ReaderException {
         final FakeFormat csv = new FakeFormat();
         Storage storage = new Storage(Arrays.asList(csv));
-        storage.fetch(new URL("http://foo.com/bar.unknown"));
+        storage.fetch("http://foo.com/bar.unknown");
     }
 
     @Test
     public void shouldReadFromURLs() throws ReaderException, MalformedURLException {
         final FakeFormat csv = new FakeFormat();
         Storage storage = new StorageWithContent(Arrays.asList(csv));
-        storage.fetch(new URL("http://foo.com/bar.csv"));
+        storage.fetch("http://foo.com/bar.csv");
 
         assertThat(csv.wasCalled(), is(true));
     }
@@ -89,7 +88,7 @@ public class StorageTest {
         }
 
         @Override
-        protected InputStream getStream(URL location) throws IOException {
+        protected InputStream getStream(String location) throws IOException {
             final String csvSnippet
                     = "bob,25,false,1213.43\n"
                     + "derek,45,true,1234.53\n";
