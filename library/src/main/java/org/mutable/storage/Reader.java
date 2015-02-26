@@ -24,25 +24,17 @@ import org.mutable.DataTable;
 /**
  * Protocol of Table readers
  */
-public abstract class Reader {
+public interface Reader {
 
     /**
      * @return the table read from the given input stream
      * @param input the stream where the table shall be read
-     * @throws ReaderException when errors when reading the stream (I/O error,
-     * timeouts, etc.)
-     */
-    public final DataTable readFrom(InputStream input) throws ReaderException {
-        return readFrom(input, TimedOutLineReader.DEFAULT_READING_TIMEOUT);
-    }
-
-    /**
-     * @return the table read from the given input stream
-     * @param input the stream where the table shall be read
+     * @param options specific to format to be read
      * @param readingTimeout the number of ms. to wait on a 'readline' before to fail
      * @throws ReaderException when errors when reading the stream (I/O error,
      * timeouts, etc.)
      */
-    public abstract DataTable readFrom(InputStream input, long readingTimeout) throws ReaderException;
+    DataTable readFrom(InputStream input, Options options, long readingTimeout) throws ReaderException;
 
+    
 }

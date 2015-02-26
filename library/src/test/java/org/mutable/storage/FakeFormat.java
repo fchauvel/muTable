@@ -20,12 +20,11 @@
 package org.mutable.storage;
 
 import java.io.InputStream;
-import java.util.List;
 import org.mutable.Table;
 import org.mutable.storage.csv.CSVFormat;
 
 /**
- *
+ * A basic mock to check whether the format was called
  */
 public class FakeFormat extends CSVFormat {
 
@@ -40,11 +39,9 @@ public class FakeFormat extends CSVFormat {
     }
 
     @Override
-    public Table read(InputStream input, long timeout) {
+    public Table read(InputStream input, Options options, long timeout) {
         wasCalled = true;
         return null;
     }
-    
-    
     
 }

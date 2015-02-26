@@ -18,7 +18,6 @@
  */
 package org.mutable.storage;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import org.mutable.Table;
@@ -42,10 +41,16 @@ public interface Format {
     /**
      * @return the table read from the given input stream
      * @param input the stream where the table shall be read
+     * @param options the options that may govern the read
      * @param timeout the maximum time to remain blocked waiting for data (in
      * ms.)
      * @throws org.mutable.storage.ReaderException if issue arise while reading
      */
-    Table read(InputStream input, long timeout) throws ReaderException;
+    Table read(InputStream input, Options options, long timeout) throws ReaderException;
+    
+    /**
+     * @return the default options associated with this format
+     */
+    Options getDefaultOptions();
 
 }

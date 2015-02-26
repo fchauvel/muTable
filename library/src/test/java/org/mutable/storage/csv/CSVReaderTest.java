@@ -18,6 +18,7 @@
  */
 package org.mutable.storage.csv;
 
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,10 +34,8 @@ import static org.mutable.FieldType.*;
 import org.mutable.Schema;
 import org.mutable.DataTable;
 import org.mutable.storage.ReaderException;
-import static org.mutable.storage.csv.CSVReader.WITHOUT_HEADER;
-import static org.mutable.storage.csv.CSVReader.WITH_HEADER;
 
-
+ 
 @RunWith(JUnit4.class)
 public class CSVReaderTest {
 
@@ -45,13 +44,12 @@ public class CSVReaderTest {
     
     @Test
     public void shouldReadSimpleCSVSnippetWithoutHeaders() throws ReaderException {
-        final CSVReader reader = makeCSVReader(WITHOUT_HEADER);
-
+  
         final String CSVSnippet
                 = "bob,35,true,123.34\n"
                 + "derek,45,false,4322.34";
 
-        final DataTable table = reader.readFrom(toStream(CSVSnippet));
+        final DataTable table = invokeRead(CSVSnippet, CSVOptions.getDefaults().withoutHeaders());
 
         final Object[][] expectedData = new Object[][]{
             {"bob", 35, true, 123.34F},
@@ -68,16 +66,19 @@ public class CSVReaderTest {
         verifyTable(table, expectedSchema, expectedData);
     }
 
+    private static DataTable invokeRead(final String CSVSnippet, final CSVOptions options) throws ReaderException {
+        return new CSVReader().readFrom(toStream(CSVSnippet), options, 1000L);
+    }
+
     @Test
     public void shouldReadCSVSnippetWithHeaders() throws ReaderException {
-        final CSVReader reader = makeCSVReader(WITH_HEADER);
 
         final String CSVSnippet
                 = "name,age,married,salary\n"
                 + "bob,35,true,123.34\n"
                 + "derek,45,false,4322.34";
 
-        final DataTable table = reader.readFrom(toStream(CSVSnippet));
+        final DataTable table = invokeRead(CSVSnippet, CSVOptions.getDefaults().withHeaders());
 
         final Object[][] expectedData = new Object[][]{
             {"bob", 35, true, 123.34F},
@@ -113,31 +114,17 @@ public class CSVReaderTest {
 
     @Test(expected = ReaderException.class)
     public void shouldTimeoutWhenThereIsNothingToRead() throws ReaderException {
-        CSVReader reader = makeCSVReader();
-        final InputStream blockedStream = new BlockingInputStream();
-        reader.readFrom(blockedStream);
+        new CSVReader().readFrom(new BlockingInputStream(), CSVOptions.getDefaults(), 1000L);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldRejectReadingFromNull() throws ReaderException {
-        CSVReader reader = makeCSVReader();
-
-        reader.readFrom(null);
-    }
-
-    private CSVReader makeCSVReader() {
-        return makeCSVReader(WITHOUT_HEADER);
-    }
-
-    private CSVReader makeCSVReader(boolean withHeaders) {
-        final String SEPARATOR = ",";
-        final CSVReader reader = new CSVReader(SEPARATOR, withHeaders);
-        return reader;
+        final InputStream stream = null;
+        new CSVReader().readFrom(stream, CSVOptions.getDefaults(), 1000L);
     }
 
     private static ByteArrayInputStream toStream(final String CSVSnippet) {
         return new ByteArrayInputStream(CSVSnippet.getBytes(StandardCharsets.UTF_8));
-
     }
 
     private static class BlockingInputStream extends InputStream {

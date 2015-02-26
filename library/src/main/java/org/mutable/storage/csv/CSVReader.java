@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with MuTable.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.mutable.storage.csv;
 
 import org.mutable.storage.ReaderException;
@@ -27,38 +28,25 @@ import java.util.List;
 import java.util.Scanner;
 import org.mutable.Schema;
 import org.mutable.DataTable;
+import org.mutable.storage.Options;
 
 /**
  * Read tables from CSV data
  */
-public class CSVReader extends Reader {
+public class CSVReader implements Reader {
 
-    public static final boolean WITH_HEADER = true;
-    public static final boolean WITHOUT_HEADER = false;
-    public static final String DEFAULT_FIELD_SEPARATOR = ",";
-
-    private final String separator;
-    private final boolean includeHeaders;
-
-    public CSVReader() {
-        this(DEFAULT_FIELD_SEPARATOR, WITHOUT_HEADER);
-    }
-
-    public CSVReader(String separator, boolean withHeaders) {
-        this.separator = separator;
-        this.includeHeaders = withHeaders;
-    }
-
+    
     @Override
-    public DataTable readFrom(final InputStream input, long readingTimeout) throws ReaderException {
+    public DataTable readFrom(final InputStream input, Options options, long readingTimeout) throws ReaderException {
         if (input == null) {
             throw new IllegalArgumentException("Cannot read table from CSV (found 'null' stream)");
         }
 
+        final CSVOptions csvOptions = (CSVOptions) options;
         final TimedOutLineReader reader = new TimedOutLineReader(input, readingTimeout);
-        final DataTable result = detectSchema(reader);
+        final DataTable result = detectSchema(reader, csvOptions);
         while (reader.hasMoreLines()) {
-            final Object[] row = extractObjects(reader.nextLine());
+            final Object[] row = extractObjects(reader.nextLine(), csvOptions);
             appendRow(result, row, reader);
         }
 
@@ -69,19 +57,19 @@ public class CSVReader extends Reader {
      * Look at the two first lines of the CSV and extract columns names and the
      * first row (used to infer columns type)
      */
-    private DataTable detectSchema(TimedOutLineReader reader) throws ReaderException {
+    private DataTable detectSchema(TimedOutLineReader reader, CSVOptions options) throws ReaderException {
         String[] columnNames = null;
         Object[] row = null;
 
-        if (includeHeaders) {
+        if (options.hasHeaders()) {
             String headerLine = reader.nextLineOrThrow("Cannot find the headers line");
-            columnNames = headerLine.split(separator);
+            columnNames = headerLine.split(options.getFieldSeparator());
             String sampleLine = reader.nextLineOrThrow("Could not find any CSV data, only headers");
-            row = extractObjects(sampleLine);
+            row = extractObjects(sampleLine, options);
 
         } else {
             String sampleLine = reader.nextLineOrThrow("Could not find any CSV data");
-            row = extractObjects(sampleLine);
+            row = extractObjects(sampleLine, options);
             columnNames = Schema.defaultColumnNames(row.length);
         }
 
@@ -94,10 +82,10 @@ public class CSVReader extends Reader {
      * Breaks a line of text into an array of primitive types (e.g., int,
      * double, boolean)
      */
-    private Object[] extractObjects(String line) {
+    private Object[] extractObjects(String line, CSVOptions options) {
         final List<Object> results = new ArrayList<>();
         final Scanner scanner = new Scanner(line);
-        scanner.useDelimiter(separator);
+        scanner.useDelimiter(options.getFieldSeparator());
         while (scanner.hasNext()) {
             if (scanner.hasNextInt()) {
                 results.add(scanner.nextInt());

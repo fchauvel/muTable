@@ -3,18 +3,17 @@
  *
  * Copyright (C) 2015 Franck Chauvel <franck.chauvel@gmail.com>
  *
- * MuTable is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * MuTable is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * Mutable is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Mutable is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with MuTable.  If not, see <http://www.gnu.org/licenses/>.
+ * along with MuTable. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.mutable.storage;
 
@@ -40,7 +39,6 @@ public class Storage {
     public Storage() {
         this(DEFAULT_SUPPORTED_FORMATS);
     }
-    
 
     public Storage(List<Format> supportedFormats) {
         this.supportedFormats = new ArrayList<>(supportedFormats);
@@ -62,26 +60,41 @@ public class Storage {
         return fetch(location, TimedOutLineReader.DEFAULT_READING_TIMEOUT);
     }
 
-    // TODO: Ensure reading timeout are set in one single place
-    
+    public Table fetch(URL location, long timeout) throws ReaderException {
+        requireValidUrl(location);
+        Format format = selectFormat(getFileExtension(location));
+        return fetch(location, format, timeout);
+    }
+
+    public Table fetch(URL location, Format format, long timeout) throws ReaderException {
+        return fetch(location, format, format.getDefaultOptions(), timeout);
+    }
+
+    public Table fetch(URL location, Options options, long timeout) throws ReaderException {
+        requireValidUrl(location);
+        Format format = selectFormat(getFileExtension(location));
+        return fetch(location, format, options, timeout);
+    }
+
     /**
      * @return a table containing the data available at the given location
      * @param location the URL of the table to fetch
+     * @param format the format which is expected
+     * @param options the options that govern the read operation
      * @param timeout the time to wait
      * @throws ReaderException when some I/O errors occurs
      */
-    public Table fetch(URL location, long timeout) throws ReaderException {
-        requireValidUrl(location);
+    public Table fetch(URL location, Format format, Options options, long timeout) throws ReaderException {
         try {
-            Format format = selectFormat(getFileExtension(location));
-            return format.read(getStream(location), timeout);
+            return format.read(getStream(location), options, timeout);
 
         } catch (IOException ex) {
             throw new ReaderException("Unable to open the url '" + location.toString() + "'", ex);
         }
     }
 
-    protected void requireValidUrl(URL location) throws IllegalArgumentException {
+
+    private void requireValidUrl(URL location) throws IllegalArgumentException {
         if (location == null) {
             throw new IllegalArgumentException("Invalid URL ('null' found)");
         }
