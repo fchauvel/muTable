@@ -13,18 +13,14 @@ structure, which fasten the assembly small numerical experiments. The
 aims of µTable is to bring the same in Java. See the example below:
 
 ```java
-Table table = Table.read("employee.csv");
+Table table = storage().fetch("http://samples.com/employee.csv");
 for(Row eachRow: table.where(field("isMarried").is(value(false)))) {
 	System.out.println(eachRow.getField("name"));
 }
 ```
 
+## Contact
 
-
-
-## 1. CONTACT
-
-Please report any bugs, issues or feature request to:
-
-       https://github.com/fchauvel/trio/issues	
+Please report any bugs, issues or feature request using the [issue tracker](https://github.com/fchauvel/trio/issues).
+Should you need any further information, feel free to email [me](franck.chauvel@gmail.com)
 
