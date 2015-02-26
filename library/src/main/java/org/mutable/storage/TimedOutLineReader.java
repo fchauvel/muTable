@@ -39,6 +39,7 @@ import java.util.concurrent.TimeoutException;
 public class TimedOutLineReader {
 
     public static final long DEFAULT_READING_TIMEOUT = 1000L;
+    
     private final ExecutorService executor;
     private final BufferedReader reader;
     private final long readTimeout;

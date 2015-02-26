@@ -32,12 +32,15 @@ import org.mutable.storage.csv.CSVFormat;
  */
 public class Storage {
 
+    private static final List<Format> DEFAULT_SUPPORTED_FORMATS = Arrays.asList(new CSVFormat());
+
     // TODO: Storage should permit to pass parameters to reader in order specify options, such as headers for instance
     private final List<Format> supportedFormats;
 
     public Storage() {
-        this(Arrays.asList(new CSVFormat()));
+        this(DEFAULT_SUPPORTED_FORMATS);
     }
+    
 
     public Storage(List<Format> supportedFormats) {
         this.supportedFormats = new ArrayList<>(supportedFormats);
@@ -50,15 +53,13 @@ public class Storage {
         return this.supportedFormats;
     }
 
-    private static final long DEFAULT_TIMEOUT = 2000;
-
     /**
      * @return the table read for the content available at the given location
      * @param location the location of the data to read
      * @throws ReaderException if some error occurs while reading the data
      */
     public Table fetch(URL location) throws ReaderException {
-        return fetch(location, DEFAULT_TIMEOUT);
+        return fetch(location, TimedOutLineReader.DEFAULT_READING_TIMEOUT);
     }
 
     // TODO: Ensure reading timeout are set in one single place
