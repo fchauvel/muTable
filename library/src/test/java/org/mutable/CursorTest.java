@@ -18,6 +18,7 @@
  */
 package org.mutable;
 
+import org.mutable.samples.Employees;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,7 +35,7 @@ public class CursorTest {
     private Cursor cursor;
 
     public CursorTest() {
-        Table table = Samples.employeeTable();
+        Table table = Employees.getTable();
         cursor = new Cursor(table, 0);
         cursor.moveToNext();
     }
@@ -142,7 +143,7 @@ public class CursorTest {
 
     @Test(expected = IllegalStateException.class)
     public void shouldNotExposeDataWhenThereIsNone() {
-        cursor = new Cursor(Samples.emptyEmployeeTable(), 0);
+        cursor = new Cursor(Employees.getEmptyTable(), 0);
         cursor.getField("name");
     }
 

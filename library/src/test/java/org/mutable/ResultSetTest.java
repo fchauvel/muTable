@@ -18,6 +18,7 @@
  */
 package org.mutable;
 
+import org.mutable.samples.Employees;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +42,7 @@ public class ResultSetTest {
     }
 
     private ResultSet makeResultSet(final Expression query, Map<Integer, Integer> cache) {
-        Table table = Samples.employeeTable();
+        Table table = Employees.getTable();
         ResultSet results = new ResultSet(table, query, cache);
         return results;
     }
@@ -134,7 +135,7 @@ public class ResultSetTest {
     public void shouldExposeItsSchema() {
         final ResultSet results = sampleResultSet();
 
-        assertThat(results.getSchema(), is(equalTo(Samples.employeeSchema())));
+        assertThat(results.getSchema(), is(equalTo(Employees.getSchema())));
     }
 
     @Test
@@ -148,7 +149,7 @@ public class ResultSetTest {
     
     @Test
     public void shouldBeIterable() {
-        Table table = Samples.employeeTable();
+        Table table = Employees.getTable();
 
         List<String> names = new ArrayList<>();
         for(Row eachRow: table.where(field("isMarried").is(value(false)))) { 

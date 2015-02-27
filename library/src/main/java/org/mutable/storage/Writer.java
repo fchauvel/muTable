@@ -32,6 +32,6 @@ public interface Writer {
      * @param table the table to write
      * @param output the output stream where the table shall be serialized
      */
-    void write(Table table, OutputStream output);
+    void write(Table table, OutputStream output, Options options);
     
 }

@@ -19,6 +19,7 @@
 package org.mutable.storage.csv;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +27,6 @@ import org.mutable.Table;
 import org.mutable.storage.Format;
 import org.mutable.storage.Options;
 import org.mutable.storage.ReaderException;
-import org.mutable.storage.Writer;
 
 /**
  * Provide information about the CSV format
@@ -34,15 +34,13 @@ import org.mutable.storage.Writer;
 public class CSVFormat implements Format {
 
     private final List<String> extensions;
-    private final Writer writer;
-
+ 
     public CSVFormat() {
-        this(Arrays.asList("csv", "tsv"), new CSVWriter());
+        this(Arrays.asList("csv", "tsv"));
     }
 
-    public CSVFormat(List<String> extensions, Writer writer) {
+    public CSVFormat(List<String> extensions) {
         this.extensions = new ArrayList<>(extensions);
-        this.writer = writer;
     }
 
     @Override
@@ -65,6 +63,11 @@ public class CSVFormat implements Format {
         return new CSVReader().readFrom(input, options, timeout);
     }
 
+    @Override
+    public void write(Table table, OutputStream output, Options options) {
+        new CSVWriter().write(table, output, options);
+    }
+    
     @Override
     public Options getDefaultOptions() {
         return new CSVOptions();

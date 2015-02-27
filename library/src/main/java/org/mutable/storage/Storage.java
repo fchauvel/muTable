@@ -18,8 +18,12 @@
  */
 package org.mutable.storage;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,7 +44,7 @@ public class Storage {
     public static Storage storage() {
         return new Storage();
     }
-    
+
     private final List<Format> supportedFormats;
 
     public Storage() {
@@ -73,12 +77,12 @@ public class Storage {
      * @return the table read for the content available at the given location
      * @param location the URL of the table to fetch
      * @param timeout the time to wait
-     * @throws ReaderException 
+     * @throws ReaderException
      */
     public Table fetch(String location, long timeout) throws ReaderException {
         return fetch(
-                location, 
-                selectFormat(getFileExtension(location)), 
+                location,
+                selectFormat(location),
                 timeout);
     }
 
@@ -91,9 +95,9 @@ public class Storage {
      */
     public Table fetch(String location, Format format, long timeout) throws ReaderException {
         return fetch(
-                location, 
-                format, 
-                format.getDefaultOptions(), 
+                location,
+                format,
+                format.getDefaultOptions(),
                 timeout);
     }
 
@@ -106,9 +110,9 @@ public class Storage {
      */
     public Table fetch(String location, Options options, long timeout) throws ReaderException {
         return fetch(
-                location, 
-                selectFormat(getFileExtension(location)), 
-                options, 
+                location,
+                selectFormat(location),
+                options,
                 timeout);
     }
 
@@ -122,13 +126,12 @@ public class Storage {
      */
     public Table fetch(String location, Format format, Options options, long timeout) throws ReaderException {
         try {
-            return format.read(getStream(location), options, timeout);
+            return format.read(getInputStream(location), options, timeout);
 
         } catch (IOException ex) {
             throw new ReaderException("Unable to open the location '" + location + "'", ex);
         }
     }
-
 
     private void requireValidUrl(String location) throws IllegalArgumentException {
         if (location == null) {
@@ -146,7 +149,7 @@ public class Storage {
      * @param location the URL whose input stream is needed
      * @return an input stream to the content of URL
      */
-    protected InputStream getStream(String location) throws IOException {
+    protected InputStream getInputStream(String location) throws IOException {
         return new URL(location).openStream();
     }
 
@@ -154,7 +157,8 @@ public class Storage {
      * @return the format that matches the given file extension
      * @param extension
      */
-    private Format selectFormat(String extension) {
+    private Format selectFormat(String location) {
+        final String extension = getFileExtension(location);
         for (Format anyFormat : supportedFormats) {
             if (anyFormat.hasExtension(extension)) {
                 return anyFormat;
@@ -185,4 +189,52 @@ public class Storage {
         return location.substring(lastDotIndex + 1, location.length());
     }
 
+    /**
+     * Store a table at the given location on disk
+     *
+     * @param table the table to be serialized
+     * @param location the path to the local to be written
+     */
+    public void store(Table table, String location) throws FileNotFoundException {
+        store(table, location, selectFormat(location));
+    }
+
+    /**
+     * Store a table at the given location on disk
+     *
+     * @param table the table to be serialized
+     * @param location the path to the local to be written
+     * @param format the format to use to write the file
+     */
+    public void store(Table table, String location, Format format) throws FileNotFoundException {
+        store(table, location, format, format.getDefaultOptions());
+    }
+
+    /**
+     * Store a table at the given location on disk
+     *
+     * @param table the table to be serialized
+     * @param location the path to the local to be written
+     * @param options the format-specific options to use
+     */
+    public void store(Table table, String location, Options options) throws FileNotFoundException {
+        store(table, location, selectFormat(location), options);
+    }
+
+    /**
+     * Store a table at the given location on disk
+     *
+     * @param table the table to be serialized
+     * @param location the path to the local to be written
+     * @param format the format to use to write the file
+     * @param options the format-specific options to use
+     */
+    public void store(Table table, String location, Format format, Options options) throws FileNotFoundException {
+        format.write(table, getOutputStream(location), options);
+    }
+
+    
+    protected OutputStream getOutputStream(String location) throws FileNotFoundException {
+        return new FileOutputStream(new File(location));
+    }
 }

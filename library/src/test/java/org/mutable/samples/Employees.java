@@ -16,20 +16,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with MuTable.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.mutable;
+package org.mutable.samples;
+
+import org.mutable.DataTable;
+import org.mutable.Schema;
 
 /**
  * A set of sample data table for testing purposes
  */
-public class Samples {
+public class Employees {
 
-    public static Schema employeeSchema() {
+    public static Schema getSchema() {
         String[] fieldNames = new String[]{"name", "age", "isMarried", "salary"};
-        Schema schema = Schema.inferedFrom(fieldNames, employeesData()[0]);
+        Schema schema = Schema.inferedFrom(fieldNames, getRawData()[0]);
         return schema;
     }
 
-    public static Object[][] employeesData() {
+    public static Object[][] getRawData() {
         return new Object[][]{
             {"bob", 25, true, 23.54},
             {"john", 34, false, 34.45},
@@ -37,16 +40,29 @@ public class Samples {
         };
     }
 
-    public static DataTable emptyEmployeeTable() {
-        Schema schema = employeeSchema();
+    public static DataTable getEmptyTable() {
+        Schema schema = getSchema();
         DataTable table = new DataTable(schema);
         return table;
     }
 
-    public static DataTable employeeTable() {
-        DataTable table = emptyEmployeeTable();
-        table.appendRows(employeesData());
+    public static DataTable getTable() {
+        DataTable table = getEmptyTable();
+        table.appendRows(getRawData());
         return table;
     }
+
+    public static String getCsvWithHeader() {
+        return "name,age,isMarried,salary" + EOL
+                + getCsvWithoutHeader();
+    }
+    
+    public static String getCsvWithoutHeader() {
+        return "bob,25,true,23.54" + EOL
+                + "john,34,false,34.45" + EOL
+                + "derek,56,false,67.34" + EOL;
+    }
+
+    private static final String EOL = System.lineSeparator();
 
 }

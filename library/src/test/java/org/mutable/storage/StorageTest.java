@@ -19,8 +19,11 @@
 package org.mutable.storage;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -31,6 +34,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.mutable.samples.Employees;
 import org.mutable.storage.csv.CSVFormat;
 
 @RunWith(JUnit4.class)
@@ -78,7 +82,16 @@ public class StorageTest {
         Storage storage = new StorageWithContent(Arrays.asList(csv));
         storage.fetch("http://foo.com/bar.csv");
 
-        assertThat(csv.wasCalled(), is(true));
+        assertThat(csv.wasReadCalled(), is(true));
+    }
+
+    @Test
+    public void shouldStoreTableOnDisk() throws FileNotFoundException {
+        final FakeFormat csv = new FakeFormat();
+        Storage storage = new StorageWithContent(Arrays.asList(csv));
+        storage.store(Employees.getTable(), "test.csv");
+
+        assertThat(csv.wasWriteCalled(), is(true));
     }
 
     private static class StorageWithContent extends Storage {
@@ -88,12 +101,19 @@ public class StorageTest {
         }
 
         @Override
-        protected InputStream getStream(String location) throws IOException {
+        protected InputStream getInputStream(String location) throws IOException {
             final String csvSnippet
                     = "bob,25,false,1213.43\n"
                     + "derek,45,true,1234.53\n";
             return new ByteArrayInputStream(csvSnippet.getBytes(Charset.defaultCharset()));
         }
+
+        @Override
+        protected OutputStream getOutputStream(String location) throws FileNotFoundException {
+            return new ByteArrayOutputStream();
+        }
+        
+        
 
     }
 }

@@ -20,73 +20,72 @@ package org.mutable.storage.csv;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mutable.Samples;
+import org.mutable.samples.Employees;
 import org.mutable.Table;
-import org.mutable.storage.Writer;
 
 @RunWith(JUnit4.class)
 public class CSVWriterTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldRejectNullTables() {
-        final Writer writer = new CSVWriter();
+        final Table table = null;
+        final ByteArrayOutputStream buffer = makeBuffer();
         
-        Table table = null;
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        writer.write(table, output);
+        write(table, buffer);
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void shouldRejectNullOutput() {
-        final Writer writer = new CSVWriter();
-        
-        Table table = Samples.employeeTable();
+        final Table table = Employees.getTable();
         final ByteArrayOutputStream output = null;
-        writer.write(table, output);
-    }
-    
-    @Test
-    public void shouldFormatTableInCSVFormat() throws UnsupportedEncodingException {
-        final Table table = Samples.employeeTable();
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-        final Writer writer = new CSVWriter();
-        writer.write(table, output);
-
-        final String expectedCSV
-                = "name,age,isMarried,salary" + EOL
-                + "bob,25,true,23.54" + EOL
-                + "john,34,false,34.45" + EOL
-                + "derek,56,false,67.34" + EOL;
-
-        assertThat(output.toString(UTF_8), is(equalTo(expectedCSV))); 
+        write(table, output);
     }
 
     @Test
-    public void shouldFormatTableInCSVFormatWithHeader() throws UnsupportedEncodingException {
-        final Table table = Samples.employeeTable();
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+    public void shouldFormatTableWithoutHeaders() throws UnsupportedEncodingException {
+        final Table table = Employees.getTable();
+        final ByteArrayOutputStream output = makeBuffer();
 
-        final Writer writer = new CSVWriter(false);
-        writer.write(table, output);
+        write(table, output);
 
-        final String expectedCSV
-                = "bob,25,true,23.54" + EOL
-                + "john,34,false,34.45" + EOL
-                + "derek,56,false,67.34" + EOL;
-
-        assertThat(output.toString(UTF_8), is(equalTo(expectedCSV)));
+        assertThat(output.toString(UTF_8), is(equalTo(Employees.getCsvWithoutHeader())));
     }
-    
+
+    @Test
+    public void shouldFormatTableWithHeader() throws UnsupportedEncodingException {
+        final Table table = Employees.getTable();
+        final ByteArrayOutputStream output = makeBuffer();
+        final CSVOptions options = defaultOptions().withHeaders();
+
+        write(table, output, options);
+
+        assertThat(output.toString(UTF_8), is(equalTo(Employees.getCsvWithHeader())));
+    }
+
+    private static ByteArrayOutputStream makeBuffer() {
+        return new ByteArrayOutputStream();
+    }
+
+    private void write(Table table, final ByteArrayOutputStream output) {
+        write(table, output, defaultOptions());
+    }
+
+    private void write(final Table table, final ByteArrayOutputStream output, final CSVOptions options) {
+        new CSVWriter().write(table, output, options);
+    }
+
+    private static CSVOptions defaultOptions() {
+        return CSVOptions.getDefaults();
+    }
+
     private static final String UTF_8 = "UTF-8";
 
-    private static final String EOL = System.lineSeparator();
 
 }

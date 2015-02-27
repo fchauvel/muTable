@@ -21,71 +21,58 @@ package org.mutable.storage.csv;
 
 import org.mutable.storage.Writer;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.mutable.Row;
 import org.mutable.Schema;
 import org.mutable.Table;
+import org.mutable.storage.Options;
 
 /**
  * A Table CSV writer
  */
 public class CSVWriter implements Writer {
 
-    public static final boolean WITH_HEADER = true;
-    public static final boolean WITHOUT_HEADER = false;
-    public static final String DEFAULT_FIELD_SEPARATOR = ",";
-    private static final String LINE_SEPARATOR = System.lineSeparator();
-
-    private final String fieldSeparator;
-    private final boolean includeHeaders;
-
-    public CSVWriter() {
-        this(DEFAULT_FIELD_SEPARATOR, WITH_HEADER);
-    }
-    
-    public CSVWriter(boolean withHeader) { 
-        this(DEFAULT_FIELD_SEPARATOR, withHeader);
-    }
-
-    /**
-     * Configure a new CSVWriter
-     * @param fieldSeparator the marker to use to separate fields
-     * @param writeHeader indicate whether a header line is needed.
-     */
-    public CSVWriter(String fieldSeparator, boolean writeHeader) {
-        this.fieldSeparator = fieldSeparator;
-        this.includeHeaders = writeHeader;
-    }
 
     @Override
-    public void write(Table table, OutputStream output) {
+    public void write(Table table, OutputStream output, Options options) {
         requireValidTable(table);
         requireValidOutput(output);
+        requireValidOptions(options);
 
-        PrintStream out = null; 
-        try {
-            out = new PrintStream(output, true, UTF_8);
+        final CSVOptions csvOptions = (CSVOptions) options;
+        final PrintStream out = openStream(output);
         
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(CSVWriter.class.getName()).log(Level.SEVERE, null, ex);
-        }
         final Schema schema = table.getSchema();
-        if (includeHeaders) {
-            printHeaderLine(schema, out);
+        
+        if (csvOptions.hasHeaders()) {
+            printHeaderLine(schema, out, csvOptions);
         }
+        
         for (Row eachRow : table) {
-            printRow(schema, out, eachRow);
+            printRow(schema, out, eachRow, csvOptions);
         }
     }
-    private static final String UTF_8 = "UTF-8";
 
+    private PrintStream openStream(OutputStream output) throws RuntimeException {
+        try {
+            return new PrintStream(output, true, UTF_8);
+            
+        } catch (UnsupportedEncodingException ex) {
+            throw new RuntimeException("Error while writing table", ex);
+            
+        }
+    }
+
+    private void requireValidOptions(Options options) throws IllegalArgumentException {
+        if (options == null) {
+            throw new IllegalArgumentException("Invalid CSV options ('null' found)");
+        }
+        if (!(options instanceof CSVOptions)) {
+            throw new IllegalArgumentException("Invalid CSV options (found " + options.getClass().getName()+ ")");
+        }
+    }
+    
     private void requireValidOutput(OutputStream output) throws IllegalArgumentException {
         if (output == null) {
             throw new IllegalArgumentException("Invalid output ('null' found)");
@@ -98,14 +85,16 @@ public class CSVWriter implements Writer {
         }
     }
 
+    private static final String UTF_8 = "UTF-8";
+
     /**
      * Print the header line of the CSV file
      */
-    private void printHeaderLine(final Schema schema, final PrintStream out) {
+    private void printHeaderLine(final Schema schema, final PrintStream out, CSVOptions options) {
         for (String eachFieldName : schema.getFieldNames()) {
             out.print(eachFieldName);
             if (schema.getFieldIndex(eachFieldName) < schema.getFieldCount()) {
-                out.print(fieldSeparator);
+                out.print(options.getFieldSeparator());
             }
         }
         out.print(LINE_SEPARATOR);
@@ -114,14 +103,16 @@ public class CSVWriter implements Writer {
     /**
      * Format a single row
      */
-    private void printRow(final Schema schema, final PrintStream out, Row eachRow) {
+    private void printRow(final Schema schema, final PrintStream out, Row eachRow, CSVOptions options) {
         for (String eachField : schema.getFieldNames()) {
             out.print(eachRow.getField(eachField));
             if (schema.getFieldIndex(eachField) < schema.getFieldCount()) {
-                out.print(fieldSeparator);
+                out.print(options.getFieldSeparator());
             }
         }
         out.print(LINE_SEPARATOR);
     }
+    
+    private static final String LINE_SEPARATOR = System.lineSeparator();
 
 }

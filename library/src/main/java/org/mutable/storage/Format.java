@@ -19,6 +19,7 @@
 package org.mutable.storage;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 import org.mutable.Table;
 
@@ -47,7 +48,16 @@ public interface Format {
      * @throws org.mutable.storage.ReaderException if issue arise while reading
      */
     Table read(InputStream input, Options options, long timeout) throws ReaderException;
-    
+
+    /**
+     * Write the given table on the given stream in this format
+     *
+     * @param table the table to be serialized
+     * @param output the output stream where the data shall be written
+     * @param options format-specific options that govern the writing operation
+     */
+    void write(Table table, OutputStream output, Options options);
+
     /**
      * @return the default options associated with this format
      */

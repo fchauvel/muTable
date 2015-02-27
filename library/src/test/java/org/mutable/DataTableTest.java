@@ -18,6 +18,7 @@
  */
 package org.mutable;
 
+import org.mutable.samples.Employees;
 import java.util.ArrayList;
 import java.util.List;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -53,35 +54,35 @@ public class DataTableTest {
     
     @Test
     public void shouldTellWhenItIsEmpty() {
-        final DataTable table = Samples.emptyEmployeeTable();
+        final DataTable table = Employees.getEmptyTable();
         
         assertThat(table.isEmpty(), is(true));
     }
 
     @Test
     public void shouldExposeTheColumnCount() {
-        final DataTable table = Samples.employeeTable();
+        final DataTable table = Employees.getTable();
 
         assertThat(table.getColumnCount(), is(equalTo(4)));
     }
 
     @Test
     public void shouldExposeTheRowCount() {
-        final DataTable table = Samples.employeeTable();
+        final DataTable table = Employees.getTable();
 
         assertThat(table.getRowCount(), is(equalTo(3)));
     }
 
     @Test
     public void shouldExposeTheDataCount() {
-        final DataTable table = Samples.employeeTable();
+        final DataTable table = Employees.getTable();
 
         assertThat(table.getDataCount(), is(equalTo(12)));
     }
 
     @Test
     public void shouldExposeSingleDataValues() {
-        final DataTable table = Samples.employeeTable();
+        final DataTable table = Employees.getTable();
 
         final Object expectation = 25;
         assertThat(table.getData(1, 2), is(equalTo(expectation)));
@@ -89,7 +90,7 @@ public class DataTableTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldNotExposeDataOnRowsThatDoNotExist() {
-        final DataTable table = Samples.employeeTable();
+        final DataTable table = Employees.getTable();
 
         final int row = 34;
         final int column = 1;
@@ -99,7 +100,7 @@ public class DataTableTest {
 
     @Test
     public void shouldExposeDataByFieldName() {
-        final DataTable table = Samples.employeeTable();
+        final DataTable table = Employees.getTable();
 
         final int row = 1;
         final String column = "name";
@@ -110,7 +111,7 @@ public class DataTableTest {
 
     @Test
     public void shouldPermitToAppendNewRows() {
-        DataTable table = Samples.employeeTable();
+        DataTable table = Employees.getTable();
         table.appendRow(new Object[]{"Steven", 35, false, 345.5});
 
         assertThat(table.getRowCount(), is(equalTo(4)));
@@ -118,25 +119,25 @@ public class DataTableTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldRejectAppendingNullRows() {
-        DataTable table = Samples.employeeTable();
+        DataTable table = Employees.getTable();
         table.appendRow(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldDetectAppendingRowsWithMissingValues() {
-        DataTable table = Samples.employeeTable();
+        DataTable table = Employees.getTable();
         table.appendRow(new Object[]{"Steven", 35, 345.5}); // Should have 4 fields
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldDetectAppendingRowsWithWrongTypes() {
-        DataTable table = Samples.employeeTable();
+        DataTable table = Employees.getTable();
         table.appendRow(new Object[]{"Steven", 35, "should be a boolean", 345.5});
     }
 
     @Test
     public void appendingASingleIllegalRowShouldNotChangeTheTable() {
-        DataTable table = Samples.employeeTable();
+        DataTable table = Employees.getTable();
         final int dataCount = table.getDataCount();
 
         try {
@@ -149,7 +150,7 @@ public class DataTableTest {
 
     @Test
     public void appendingRowsWhereTheLastOneIsInvalidShouldNotChangeTheTable() {
-        DataTable table = Samples.employeeTable();
+        DataTable table = Employees.getTable();
         final int dataCount = table.getDataCount();
 
         try {
@@ -177,14 +178,14 @@ public class DataTableTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldNotExposeRowsThatDoNotExist() {
-        DataTable table = Samples.employeeTable();
+        DataTable table = Employees.getTable();
         table.getRow(134);
     }
 
     
     @Test
     public void shouldResolveQuery() {
-        DataTable table = Samples.employeeTable();
+        DataTable table = Employees.getTable();
         ResultSet results = table.where(field("name").is(value("derek")));
         assertThat(results.getRowCount(), is(equalTo(1)));
     }
@@ -192,7 +193,7 @@ public class DataTableTest {
     
     @Test
     public void shouldProvideCursors() {
-        DataTable table = Samples.employeeTable();
+        DataTable table = Employees.getTable();
         Cursor cursor = table.newCursor();
         
         assertThat(cursor.getRowIndex(), is(equalTo(1)));
@@ -202,7 +203,7 @@ public class DataTableTest {
     public void shouldBeIterable() {
         List<String> names = new ArrayList<>();
      
-        for(Row eachRow: Samples.employeeTable()) {
+        for(Row eachRow: Employees.getTable()) {
             names.add((String) eachRow.getField("name"));
         }
         

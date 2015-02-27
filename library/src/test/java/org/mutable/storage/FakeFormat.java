@@ -20,6 +20,7 @@
 package org.mutable.storage;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import org.mutable.Table;
 import org.mutable.storage.csv.CSVFormat;
 
@@ -28,20 +29,33 @@ import org.mutable.storage.csv.CSVFormat;
  */
 public class FakeFormat extends CSVFormat {
 
-    private boolean wasCalled;
+    private boolean wasRead;
+    private boolean wasWritten;
 
     public FakeFormat() {
-        wasCalled = false;
+        wasRead = false;
+        wasWritten = false;
     }
     
-    public boolean wasCalled() {
-        return wasCalled;
+    public boolean wasReadCalled() {
+        return wasRead;
+    }
+    
+    public boolean wasWriteCalled() {
+        return wasWritten;
     }
 
     @Override
     public Table read(InputStream input, Options options, long timeout) {
-        wasCalled = true;
+        wasRead = true;
         return null;
     }
+
+    @Override
+    public void write(Table table, OutputStream output, Options options) {
+        wasWritten = true;
+    }
+    
+    
     
 }

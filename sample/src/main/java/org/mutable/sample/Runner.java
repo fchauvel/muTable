@@ -16,11 +16,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with MuTable.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.mutable.sample;
 
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.mutable.DataTable;
@@ -31,7 +30,7 @@ import static org.mutable.SchemaBuilder.aSchema;
 import org.mutable.Table;
 import static org.mutable.expression.FieldReference.field;
 import static org.mutable.expression.Literal.value;
-import org.mutable.storage.csv.CSVWriter;
+import static org.mutable.storage.Storage.storage;
 
 /**
  * A sample application using the muTable library
@@ -54,20 +53,13 @@ public class Runner {
         });
 
         Table selection = table.where(field("isMarried").is(value(false)));
-
-        FileOutputStream file = null;
+        
         try {
-            CSVWriter csv = new CSVWriter();
-            file = new FileOutputStream("people.csv");
-            csv.write(selection, file);
-            try {
-                file.close();
-            } catch (IOException ioe) {
-                Logger.getLogger(Runner.class.getName()).log(Level.SEVERE, null, ioe);
-            }
+            storage().store(selection, "employees_not_married.csv");
+        
         } catch (FileNotFoundException ex) {
-
             Logger.getLogger(Runner.class.getName()).log(Level.SEVERE, null, ex);
+        
         }
     }
 
