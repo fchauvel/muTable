@@ -36,6 +36,76 @@ public interface Row {
     Object getField(String fieldName);
 
     /**
+     * @return the value contained is a specific field/column of this row,
+     * casted as an int
+     * @param fieldName the name of the field
+     */
+    int getInteger(String fieldName);
+
+    /**
+     * @return the value contained is a specific field/column of this row casted
+     * as an int
+     * @param fieldIndex the position of the field starting at 1
+     */
+    int getInteger(int fieldIndex);
+
+    /**
+     * @return the value contained is a specific field/column of this row,
+     * casted as a long
+     * @param fieldName the name of the field
+     */
+    long getLong(String fieldName);
+
+    /**
+     * @return the value contained is a specific field/column of this row casted
+     * as a long
+     * @param fieldIndex the position of the field starting at 1
+     */
+    long getLong(int fieldIndex);
+
+    /**
+     * @return the value contained is a specific field/column of this row,
+     * casted as a double
+     * @param fieldName the name of the field
+     */
+    double getDouble(String fieldName);
+
+    /**
+     * @return the value contained is a specific field/column of this row casted
+     * as a double
+     * @param fieldIndex the position of the field starting at 1
+     */
+    double getDouble(int fieldIndex);
+
+    /**
+     * @return the value contained is a specific field/column of this row,
+     * casted as a boolean
+     * @param fieldName the name of the field
+     */
+    float getFloat(String fieldName);
+
+    /**
+     * @return the value contained is a specific field/column of this row casted
+     * as a float
+     * @param fieldIndex the position of the field starting at 1
+     */
+    float getFloat(int fieldIndex);
+
+    /**
+     * @return the value contained is a specific field/column of this row,
+     * casted as a boolean
+     * @param fieldName the name of the field
+     */
+    boolean getBoolean(String fieldName);
+
+    /**
+     * @return the value contained is a specific field/column of this row casted
+     * as a boolean
+     * @param fieldIndex the position of the field starting at 1
+     */
+    boolean getBoolean(int fieldIndex);
+
+    /**
      * @return the index of this row in the table, starting at 1
      */
     int getRowIndex();

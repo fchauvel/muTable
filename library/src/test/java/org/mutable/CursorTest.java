@@ -30,7 +30,7 @@ import org.junit.runners.JUnit4;
  */
 @RunWith(JUnit4.class)
 public class CursorTest {
-    
+
     private Cursor cursor;
 
     public CursorTest() {
@@ -38,8 +38,7 @@ public class CursorTest {
         cursor = new Cursor(table, 0);
         cursor.moveToNext();
     }
-   
-    
+
     @Test
     public void shouldBeDuplicable() {
         Cursor copy = new Cursor(cursor);
@@ -47,7 +46,6 @@ public class CursorTest {
     }
 
     // TODO: Test comparison of cursors
-    
     @Test
     public void shouldExposeItsPosition() {
         assertThat(cursor.getRowIndex(), is(equalTo(1)));
@@ -59,15 +57,94 @@ public class CursorTest {
     }
 
     @Test
+    public void shouldExposeValueAsDoubleIfTypeMatches() {
+        assertThat(cursor.getDouble("salary"), is(equalTo(23.54)));
+    }
+
+    @Test
+    public void shouldExposeValueByIndexAsDoubleIfTypeMatches() {
+        assertThat(cursor.getDouble(4), is(equalTo(23.54)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldNotExposeValueAsDoubleIfTypeDoesNotMatch() {
+        cursor.getDouble("isMarried");
+    }
+
+    /* Unable to cast double to float
+    @Test
+    public void shouldExposeValueAsFloatIfTypeMatches() {
+        assertThat(cursor.getFloat("salary"), is(equalTo(23.54)));
+    }
+
+    @Test
+    public void shouldExposeValueByIndexAsFloatIfTypeMatches() {
+        assertThat(cursor.getFloat(4), is(equalTo(23.54)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldNotExposeValueAsFloatIfTypeDoesNotMatch() {
+        cursor.getFloat("isMarried");
+    }
+    */
+
+    @Test
+    public void shouldExposeValueAsBooleanIfTypeMatches() {
+        assertThat(cursor.getBoolean("isMarried"), is(true));
+    }
+
+    @Test
+    public void shouldExposeValueByIndexAsBooleanIfTypeMatches() {
+        assertThat(cursor.getBoolean(3), is(true));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldNotExposeValueAsBooleanIfTypeDoesNotMatch() {
+        cursor.getBoolean("salary");
+    }
+
+    @Test
+    public void shouldExposeValueAsIntegerIfTypeMatches() {
+        assertThat(cursor.getInteger("age"), is(equalTo(25)));
+    }
+
+    @Test
+    public void shouldExposeValueByIndexAsIntegerIfTypeMatches() {
+        assertThat(cursor.getInteger(2), is(equalTo(25)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldNotExposeValueAsIntegerIfTypeDoesNotMatch() {
+        cursor.getInteger("name");
+    }
+    
+    /*
+    @Test
+    public void shouldExposeValueAsLongIfTypeMatches() {
+        assertThat(cursor.getLong("age"), is(equalTo(25)));
+    }
+
+    @Test
+    public void shouldExposeValueByIndexAsLongIfTypeMatches() {
+        assertThat(cursor.getLong(1), is(equalTo(25)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldNotExposeValueAsLongIfTypeDoesNotMatch() {
+        cursor.getLong("isMarried");
+    }
+    */
+
+    @Test
     public void shouldExposeDataByFieldIndex() {
         assertThat(cursor.getField(1), is(equalTo("bob")));
     }
-    
-     @Test(expected = IllegalStateException.class)
-     public void shouldNotExposeDataWhenThereIsNone() {
-         cursor = new Cursor(Samples.emptyEmployeeTable(), 0);
-         cursor.getField("name");
-     }
+
+    @Test(expected = IllegalStateException.class)
+    public void shouldNotExposeDataWhenThereIsNone() {
+        cursor = new Cursor(Samples.emptyEmployeeTable(), 0);
+        cursor.getField("name");
+    }
 
     @Test
     public void shouldAllowMovingToTheNextRow() {
@@ -103,5 +180,5 @@ public class CursorTest {
     public void shouldPermitCheckingForTheExistenceOfAPreviousRow() {
         assertThat(cursor.hasPrevious(), is(false));
     }
-    
+
 }

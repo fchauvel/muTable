@@ -19,7 +19,7 @@
 package org.mutable;
 
 /**
- * Cursor let the user iterate over a table
+ * Cursor: A movable pointer to a specific row in a table
  */
 public class Cursor implements Row {
 
@@ -40,15 +40,101 @@ public class Cursor implements Row {
 
     @Override
     public Object getField(int fieldIndex) {
+        requireValidIndex();
         return source.getData(index, fieldIndex);
+    }
+
+    private void requireValidIndex() throws IllegalStateException {
+        if (index == 0) {
+            throw new IllegalStateException("Invalid cursor index (index = 0)");
+        }
     }
 
     @Override
     public Object getField(String fieldName) {
-        if(index == 0) {
-            throw new IllegalStateException("The cursor is crappy");
-        } 
+        requireValidIndex();
         return source.getData(index, fieldName);
+    }
+
+    @Override
+    public int getInteger(String fieldName) {
+        return getFieldAs(Integer.class, fieldName);
+    }
+
+    @Override
+    public int getInteger(int fieldIndex) {
+        return getFieldAs(Integer.class, fieldIndex);
+    }
+
+    @Override
+    public long getLong(String fieldName) {
+        return getFieldAs(Long.class, fieldName);
+    }
+
+    @Override
+    public long getLong(int fieldIndex) {
+        return getFieldAs(Long.class, fieldIndex);
+    }
+
+    @Override
+    public float getFloat(String fieldName) {
+        return getFieldAs(Float.class, fieldName);
+    }
+
+    @Override
+    public float getFloat(int fieldIndex) {
+        return getFieldAs(Float.class, fieldIndex);
+    }
+
+    @Override
+    public double getDouble(String fieldName) {
+        return getFieldAs(Double.class, fieldName);
+    }
+
+    @Override
+    public double getDouble(int fieldIndex) {
+        return getFieldAs(Double.class, fieldIndex);
+    }
+
+    @Override
+    public boolean getBoolean(String fieldName) {
+        return getFieldAs(Boolean.class, fieldName);
+    }
+
+    @Override
+    public boolean getBoolean(int fieldIndex) {
+        return getFieldAs(Boolean.class, fieldIndex);
+    }
+
+    /**
+     * @return the value of the selected field, casted in the given type
+     * @param <T> the type in which the value should be casted
+     * @param type the class that represent the type Java
+     * @param fieldIndex the index of the field of interest in [1, n]
+     */
+    private <T> T getFieldAs(Class<T> type, int fieldIndex) {
+        assert type != null : "Cannot cast an object to the 'null' type";
+
+        final Object value = getField(fieldIndex);
+        try {
+            return type.cast(value);
+            
+        } catch (ClassCastException cce) {
+            final FieldType expectedType = source.getSchema().getField(fieldIndex).getType();
+            final String error = String.format("Type conversion error for field no. %d (from '%s' to '%s')", fieldIndex, expectedType.getClassName(), type.getName());
+            throw new IllegalArgumentException(error, cce);
+        
+        }
+    }
+
+    /**
+     * @return the value of the selected field, casted in the given type
+     * @param <T> the type in which the value should be casted
+     * @param type the class that represent the type Java
+     * @param fieldName the name of the field of interest
+     */
+    private <T> T getFieldAs(Class<T> type, String fieldName) {
+        return getFieldAs(type, source.getSchema().getFieldIndex(fieldName));
     }
 
     @Override
@@ -94,7 +180,7 @@ public class Cursor implements Row {
     public String toString() {
         StringBuilder buffer = new StringBuilder();
         buffer.append(index).append(": (");
-        for(String eachField: source.getSchema().getFieldNames()) {
+        for (String eachField : source.getSchema().getFieldNames()) {
             buffer.append(getField(eachField));
             buffer.append(",");
         }

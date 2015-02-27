@@ -36,6 +36,10 @@ public enum FieldType {
         this.className = className;
     }
     
+    public String getClassName() {
+        return this.className;
+    }
+    
     public static FieldType of(Object object) {
         if (object == null) {
             throw new IllegalArgumentException("Unsupported column type 'null'");

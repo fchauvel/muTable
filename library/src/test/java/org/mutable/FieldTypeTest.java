@@ -16,11 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with MuTable.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.mutable;
 
 import static org.hamcrest.CoreMatchers.equalTo;

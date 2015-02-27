@@ -38,7 +38,12 @@ allprojects {
         group = "Reporting"
         description = "Generate Jacoco coverage reports after running tests."
         additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+        reports {
+            xml.enabled false
+            csv.enabled true
+        }
     }
+    
     
 }
 
@@ -51,3 +56,13 @@ project(':sample') {
 task wrapper(type: Wrapper) {
     gradleVersion = '2.2.1'
 }
+
+//task updateCoverageBadge << {
+//    def coverageReport = new File("library/build/reports/jacoco/test/html/index.html")
+//    coverageReport.eachLine {
+//        def matcher = (it =~ /Total(?: .*)([0-9]+)%/ )
+//        if (matcher.matches()) {
+//            println("Coverage=" + matcher[0][2])
+//        }
+//    }
+//}
