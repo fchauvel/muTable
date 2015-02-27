@@ -31,6 +31,11 @@ public class Employees {
         Schema schema = Schema.inferedFrom(fieldNames, getRawData()[0]);
         return schema;
     }
+    
+    public static Schema getGeneratedSchema() {
+        Schema schema = Schema.inferedFrom(getRawData()[0]);
+        return schema;
+    }
 
     public static Object[][] getRawData() {
         return new Object[][]{

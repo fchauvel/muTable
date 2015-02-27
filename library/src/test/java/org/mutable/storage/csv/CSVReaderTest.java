@@ -18,7 +18,6 @@
  */
 package org.mutable.storage.csv;
 
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,41 +28,24 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mutable.Field;
-import static org.mutable.FieldType.*;
 import org.mutable.Schema;
 import org.mutable.DataTable;
+import org.mutable.samples.Employees;
 import org.mutable.storage.ReaderException;
 
- 
 @RunWith(JUnit4.class)
 public class CSVReaderTest {
 
     // TODO: Handle missing values
-    // TODO: Factor out CSV snippets
-    
     @Test
     public void shouldReadSimpleCSVSnippetWithoutHeaders() throws ReaderException {
-  
-        final String CSVSnippet
-                = "bob,35,true,123.34\n"
-                + "derek,45,false,4322.34";
 
-        final DataTable table = invokeRead(CSVSnippet, CSVOptions.getDefaults().withoutHeaders());
+        final DataTable table = invokeRead(
+                Employees.getCsvWithoutHeader(),
+                CSVOptions.getDefaults().withoutHeaders()
+        );
 
-        final Object[][] expectedData = new Object[][]{
-            {"bob", 35, true, 123.34F},
-            {"derek", 45, false, 4322.34F}
-        };
-
-        final Schema expectedSchema = new Schema(new Field[]{
-            new Field("column 1", STRING),
-            new Field("column 2", INTEGER),
-            new Field("column 3", BOOLEAN),
-            new Field("column 4", FLOAT)
-        });
-
-        verifyTable(table, expectedSchema, expectedData);
+        verifyTable(table, Employees.getGeneratedSchema(), Employees.getRawData());
     }
 
     private static DataTable invokeRead(final String CSVSnippet, final CSVOptions options) throws ReaderException {
@@ -73,34 +55,19 @@ public class CSVReaderTest {
     @Test
     public void shouldReadCSVSnippetWithHeaders() throws ReaderException {
 
-        final String CSVSnippet
-                = "name,age,married,salary\n"
-                + "bob,35,true,123.34\n"
-                + "derek,45,false,4322.34";
-
-        final DataTable table = invokeRead(CSVSnippet, CSVOptions.getDefaults().withHeaders());
-
-        final Object[][] expectedData = new Object[][]{
-            {"bob", 35, true, 123.34F},
-            {"derek", 45, false, 4322.34F}
-        };
-
-        final Schema expectedSchema = new Schema(new Field[]{
-            new Field("name", STRING),
-            new Field("age", INTEGER),
-            new Field("married", BOOLEAN),
-            new Field("salary", FLOAT)
-        });
-
-        verifyTable(table, expectedSchema, expectedData);
+        final DataTable table = invokeRead(
+                Employees.getCsvWithHeader(),
+                CSVOptions.getDefaults().withHeaders());                
+        
+        verifyTable(table, Employees.getSchema(), Employees.getRawData());
     }
 
     public void verifyTable(final DataTable table, final Schema expectedSchema, final Object[][] expectedData) {
         assertThat("schema", table.getSchema(), is(equalTo(expectedSchema)));
 
-        assertThat("row count", table.getRowCount(), is(equalTo(2)));
-        assertThat("column count", table.getColumnCount(), is(equalTo(4)));
-        assertThat("data count", table.getDataCount(), is(equalTo(8)));
+        assertThat("row count", table.getRowCount(), is(expectedData.length));
+        assertThat("column count", table.getColumnCount(), is(expectedData[0].length));
+        assertThat("data count", table.getDataCount(), is(expectedData.length * expectedData[0].length));
 
         for (int row = 0; row < table.getRowCount(); row++) {
             for (int column = 0; column < table.getColumnCount(); column++) {
@@ -136,9 +103,11 @@ public class CSVReaderTest {
 
         @Override
         public int read(byte[] b) throws IOException {
-             try {
-                while(true) { wait(); }
-                
+            try {
+                while (true) {
+                    wait();
+                }
+
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
@@ -148,10 +117,12 @@ public class CSVReaderTest {
         @Override
         public int read() throws IOException {
             try {
-                while(true) { wait();}
-                
+                while (true) {
+                    wait();
+                }
+
             } catch (InterruptedException ex) {
-               ex.printStackTrace();
+                ex.printStackTrace();
             }
             return 0;
         }

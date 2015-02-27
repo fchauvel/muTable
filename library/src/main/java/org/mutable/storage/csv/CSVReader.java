@@ -91,10 +91,10 @@ public class CSVReader implements Reader {
                 results.add(scanner.nextInt());
             } else if (scanner.hasNextLong()) {
                 results.add(scanner.nextLong());
-            } else if (scanner.hasNextFloat()) {
-                results.add(scanner.nextFloat());
             } else if (scanner.hasNextDouble()) {
                 results.add(scanner.nextDouble());
+            } else if (scanner.hasNextFloat()) {
+                results.add(scanner.nextFloat());
             } else if (scanner.hasNextBoolean()) {
                 results.add(scanner.nextBoolean());
             } else {
