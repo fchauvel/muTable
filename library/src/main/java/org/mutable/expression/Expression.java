@@ -33,8 +33,22 @@ public abstract class Expression {
      */
     public abstract Object evaluate(Row row);
 
+    /**
+     * Equality operator
+     * @param right the right operand of the operator (this expression for equality operator)
+     * @return the expression for the equality test
+     */
     public final IsEqualTo is(Expression right) {
         return new IsEqualTo(this, right);
+    }
+    
+    /**
+     * Operator comparison (greater than)
+     * @param right the right operand of the operator (this expression for equality operator)
+     * @return the expression for the equality test
+     */
+    public final IsGreaterThan isGreaterThan(Expression right) {
+        return new IsGreaterThan(this, right);
     }
 
 }
