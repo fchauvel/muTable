@@ -13,10 +13,21 @@ import org.mutable.samples.Employees;
 /**
  * Specification of the 
  */
-public class IsGreaterThanTest {
+public class ExpressionTest {
 
     @Test
-    public void shouldEvaluateProperly() {
+    public void logicalAndShouldEvaluateProperly() {
+        Table employees = Employees.getTable();
+        
+        Table selection = employees.where(field("salary").isGreaterThan(value(50D)).and(field("name").is(value("derek"))));
+  
+        assertThat(selection.getRowCount(), is(equalTo(1)));
+        assertThat(selection.getData(1, "name"), is(equalTo("derek")));
+        
+    }
+    
+    @Test
+    public void greaterThanShouldEvaluateProperly() {
         Table employees = Employees.getTable();
         Table selection = employees.where(field("salary").isGreaterThan(value(50D)));
         

@@ -22,30 +22,22 @@ package org.mutable.expression;
 import org.mutable.Row;
 
 
-public class IsEqualTo extends Expression {
+public class IsEqualTo extends BinaryExpression {
     
-    private final Expression left;
-    private final Expression right;
-    
-    
-    public IsEqualTo(Expression left, Expression right) {
-        assert left != null: "Invalid 'IsEqualTo' (left is 'null')";
-        assert right != null: "Invalid 'IsEqualTo' (right is 'null')";
-        
-        this.left = left;
-        this.right = right;
+    public IsEqualTo(Expression leftOperand, Expression rightOperand) {
+        super(leftOperand, rightOperand);
     }
 
     @Override
     public Object evaluate(Row row) {
-        Object leftValue = left.evaluate(row);
-        Object rightValue = right.evaluate(row);
+        Object leftValue = getLeftOperand().evaluate(row);
+        Object rightValue = getRightOperand().evaluate(row);
         return leftValue.equals(rightValue);
     }
     
     @Override
     public String toString() {
-        return left + " is " + right;
+        return getLeftOperand() + " is " + getRightOperand();
     }
     
 }

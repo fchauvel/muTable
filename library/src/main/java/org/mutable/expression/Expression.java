@@ -3,18 +3,17 @@
  *
  * Copyright (C) 2015 Franck Chauvel <franck.chauvel@gmail.com>
  *
- * MuTable is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * MuTable is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * Mutable is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Mutable is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with MuTable.  If not, see <http://www.gnu.org/licenses/>.
+ * along with MuTable. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.mutable.expression;
 
@@ -34,17 +33,31 @@ public abstract class Expression {
     public abstract Object evaluate(Row row);
 
     /**
+     * Logical conjunction of this expression and the given one
+     *
+     * @param right the right operand of the logical expression
+     * @return the logical conjunction
+     */
+    public final LogicalAnd and(Expression right) {
+        return new LogicalAnd(this, right);
+    }
+
+    /**
      * Equality operator
-     * @param right the right operand of the operator (this expression for equality operator)
+     *
+     * @param right the right operand of the operator (this expression for
+     * equality operator)
      * @return the expression for the equality test
      */
     public final IsEqualTo is(Expression right) {
         return new IsEqualTo(this, right);
     }
-    
+
     /**
      * Operator comparison (greater than)
-     * @param right the right operand of the operator (this expression for equality operator)
+     *
+     * @param right the right operand of the operator (this expression for
+     * equality operator)
      * @return the expression for the equality test
      */
     public final IsGreaterThan isGreaterThan(Expression right) {
