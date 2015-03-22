@@ -51,6 +51,16 @@ public abstract class Expression {
     public final LogicalOr or(Expression right) {
         return new LogicalOr(this, right);
     }
+    
+    /**
+     * Logical implication of this expression and the given one
+     * 
+     * @param right operand of the logical expression
+     * @return the logical implication
+     */
+    public final LogicalOr implies(Expression right) {
+        return new Negation(this).or(right);
+    }
 
     /**
      * Equality operator

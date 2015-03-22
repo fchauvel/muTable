@@ -54,7 +54,7 @@ public class ExpressionTest {
         assertThat(selection.getData(1, "name"), is(equalTo("bob")));
         assertThat(selection.getData(2, "name"), is(equalTo("derek")));
     }
-    
+
     @Test
     public void negationShouldEvaluateProperly() {
         Table selection = employees.where(not(field("name").is(value("derek"))));
@@ -62,6 +62,16 @@ public class ExpressionTest {
         assertThat(selection.getRowCount(), is(equalTo(2)));
         assertThat(selection.getData(1, "name"), is(equalTo("bob")));
         assertThat(selection.getData(2, "name"), is(equalTo("john")));
+    }
+
+    @Test
+    public void implicationShouldEvaluateProperly() {
+        Table selection = employees.where(field("name").is(value("derek")).implies(field("salary").isAbove(value(50D))));
+
+        assertThat(selection.getRowCount(), is(equalTo(3)));
+        assertThat(selection.getData(1, "name"), is(equalTo("bob")));
+        assertThat(selection.getData(2, "name"), is(equalTo("john")));
+        assertThat(selection.getData(3, "name"), is(equalTo("derek")));
     }
 
     @Test
