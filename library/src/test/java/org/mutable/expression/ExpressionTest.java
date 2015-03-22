@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.mutable.Table;
 import static org.mutable.expression.FieldReference.field;
 import static org.mutable.expression.Literal.value;
+import static org.mutable.expression.Negation.not;
 import org.mutable.samples.Employees;
 
 /**
@@ -52,6 +53,15 @@ public class ExpressionTest {
         assertThat(selection.getRowCount(), is(equalTo(2)));
         assertThat(selection.getData(1, "name"), is(equalTo("bob")));
         assertThat(selection.getData(2, "name"), is(equalTo("derek")));
+    }
+    
+    @Test
+    public void negationShouldEvaluateProperly() {
+        Table selection = employees.where(not(field("name").is(value("derek"))));
+
+        assertThat(selection.getRowCount(), is(equalTo(2)));
+        assertThat(selection.getData(1, "name"), is(equalTo("bob")));
+        assertThat(selection.getData(2, "name"), is(equalTo("john")));
     }
 
     @Test

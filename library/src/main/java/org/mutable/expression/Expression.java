@@ -86,12 +86,15 @@ public abstract class Expression {
     }
 
     // Helper for converting operands
+
     protected Boolean asBoolean(Object value) {
         if (value instanceof Boolean) {
             return (Boolean) value;
         }
 
-        final String error = String.format("Illegal operand tyoe (should be java.lang.Boolean, but found '%s')", value.getClass().getName());
+        final String error 
+                = String.format("Illegal operand tyoe (should be java.lang.Boolean, but found '%s')", 
+                        value.getClass().getName());
         throw new IllegalArgumentException(error);
     }
 
@@ -101,7 +104,7 @@ public abstract class Expression {
         }
 
         final String error
-                = String.format("Invalid %s operand (expecting '%s' but found '%s')",
+                = String.format("Invalid %s operand type (expecting '%s' but found '%s')",
                         Comparable.class.getName(),
                         value.getClass().getName());
 
