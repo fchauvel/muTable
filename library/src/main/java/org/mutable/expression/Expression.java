@@ -54,14 +54,25 @@ public abstract class Expression {
     }
 
     /**
-     * Operator comparison (greater than)
-     *
+     * GreaterThan (>) comparison operator
+     * 
      * @param right the right operand of the operator (this expression for
      * equality operator)
      * @return the expression for the equality test
      */
     public final IsGreaterThan isGreaterThan(Expression right) {
         return new IsGreaterThan(this, right);
+    }
+    
+    /**
+     * LessThan (<) comparison operator
+     *
+     * @param right the right operand of the operator (this expression for
+     * equality operator)
+     * @return the expression for the equality test
+     */    
+    public final IsBelow isBelow(Expression right) {
+        return new IsBelow(this, right);
     }
 
 }

@@ -26,6 +26,17 @@ public class ExpressionTest {
         
     }
     
+    
+    @Test
+    public void lessThanShouldEvaluateProperly() {
+        Table employees = Employees.getTable();
+        Table selection = employees.where(field("salary").isBelow(value(50D)));
+        
+        assertThat(selection.getRowCount(), is(equalTo(2)));
+        assertThat(selection.getData(1, "name"), is(equalTo("bob")));
+        assertThat(selection.getData(2, "name"), is(equalTo("john")));
+    }
+    
     @Test
     public void greaterThanShouldEvaluateProperly() {
         Table employees = Employees.getTable();
