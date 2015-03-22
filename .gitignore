@@ -10,3 +10,6 @@ build/
 # Emacs
 *~
 \#*\#
+
+# jbake
+src/site/output*
