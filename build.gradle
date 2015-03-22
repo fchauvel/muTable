@@ -57,12 +57,10 @@ task wrapper(type: Wrapper) {
     gradleVersion = '2.2.1'
 }
 
-//task updateCoverageBadge << {
-//    def coverageReport = new File("library/build/reports/jacoco/test/html/index.html")
-//    coverageReport.eachLine {
-//        def matcher = (it =~ /Total(?: .*)([0-9]+)%/ )
-//        if (matcher.matches()) {
-//            println("Coverage=" + matcher[0][2])
-//        }
-//    }
-//}
+task updateCoverageBadge << {
+    def coverageReport = new File("library/build/reports/jacoco/test/html/index.html")
+    coverageReport.eachLine {
+        def matcher = (it =~ /Total<\/td><td class="bar">([0-9,]+) of ([0-9,]+)<\/td><td class="ctr2">([0-9]+)%<\/td>/ )
+        println("Coverage=" + matcher[0][3])
+    }
+}

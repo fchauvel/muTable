@@ -1,11 +1,9 @@
 
 # µTable
 
-Copyright (C) 2015 - [Franck CHAUVEL](franck.chauvel@gmail.com)
+Copyright (C) 2015 - [Franck CHAUVEL](mailto:franck.chauvel@gmail.com)
 
-![License](https://img.shields.io/badge/License-LGPLv3-GREEN.svg)
-[![Build Status](https://drone.io/github.com/fchauvel/muTable/status.png)](https://drone.io/github.com/fchauvel/muTable/latest)
-
+![Build Status](https://drone.io/github.com/fchauvel/muTable/status.png)](https://drone.io/github.com/fchauvel/muTable/latest)
 
 µTable is a tiny Java library to ease the manipulation of data
 table. Languages like R for instance provides very convenient data
@@ -22,5 +20,5 @@ for(Row eachRow: table.where(field("isMarried").is(value(false)))) {
 ## Contact
 
 Please report any bugs, issues or feature request using the [issue tracker](https://github.com/fchauvel/trio/issues).
-Should you need any further information, feel free to email [me](franck.chauvel@gmail.com)
+Should you need any further information, feel free to email [me](mailto:franck.chauvel@gmail.com)
 
