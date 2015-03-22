@@ -19,11 +19,10 @@ public class ExpressionTest {
     public void logicalAndShouldEvaluateProperly() {
         Table employees = Employees.getTable();
         
-        Table selection = employees.where(field("salary").isGreaterThan(value(50D)).and(field("name").is(value("derek"))));
+        Table selection = employees.where(field("salary").isAbove(value(50D)).and(field("name").is(value("derek")))); 
   
         assertThat(selection.getRowCount(), is(equalTo(1)));
         assertThat(selection.getData(1, "name"), is(equalTo("derek")));
-        
     }
     
     
@@ -37,10 +36,11 @@ public class ExpressionTest {
         assertThat(selection.getData(2, "name"), is(equalTo("john")));
     }
     
+    
     @Test
     public void greaterThanShouldEvaluateProperly() {
         Table employees = Employees.getTable();
-        Table selection = employees.where(field("salary").isGreaterThan(value(50D)));
+        Table selection = employees.where(field("salary").isAbove(value(50D)));
         
         assertThat(selection.getRowCount(), is(equalTo(1)));
         assertThat(selection.getData(1, "name"), is(equalTo("derek")));

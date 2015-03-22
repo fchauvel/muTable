@@ -5,6 +5,9 @@ package org.mutable.expression;
  */
 public abstract class BinaryExpression extends Expression {
 
+    protected static final String LEFT_OPERAND = "left";
+    protected static final String RIGHT_OPERAND = "right";
+
     private final Expression leftOperand;
     private final Expression rightOperand;
 
@@ -15,20 +18,19 @@ public abstract class BinaryExpression extends Expression {
         this.leftOperand = leftOperand;
         this.rightOperand = rightOperand;
     }
-    
+
     /**
      * @return the expression of the left operand
      */
     public Expression getLeftOperand() {
         return leftOperand;
     }
-    
+
     /**
      * @return the expression of the right operand
      */
     public Expression getRightOperand() {
         return rightOperand;
     }
-    
-    
+
 }

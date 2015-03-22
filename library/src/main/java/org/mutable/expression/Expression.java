@@ -60,8 +60,8 @@ public abstract class Expression {
      * equality operator)
      * @return the expression for the equality test
      */
-    public final IsGreaterThan isGreaterThan(Expression right) {
-        return new IsGreaterThan(this, right);
+    public final IsAbove isAbove(Expression right) {
+        return new IsAbove(this, right);
     }
     
     /**
