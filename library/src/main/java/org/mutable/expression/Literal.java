@@ -24,7 +24,7 @@ public class Literal extends Expression {
 
     /**
      * Factory method part of the fluent interface API
-     */
+    */
     public static Literal value(Object value) {
         return new Literal(value);
     }

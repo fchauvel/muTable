@@ -25,6 +25,7 @@ import org.mutable.Table;
 import static org.mutable.expression.FieldReference.field;
 import static org.mutable.expression.Literal.value;
 import static org.mutable.expression.Negation.not;
+import static org.mutable.expression.RegexMatch.pattern;
 import org.mutable.samples.Employees;
 
 /**
@@ -72,6 +73,14 @@ public class ExpressionTest {
         assertThat(selection.getData(1, "name"), is(equalTo("bob")));
         assertThat(selection.getData(2, "name"), is(equalTo("john")));
         assertThat(selection.getData(3, "name"), is(equalTo("derek")));
+    }
+
+    @Test
+    public void regexMatchingShouldEvaluateProperly() {
+        Table selection = employees.where(field("name").matches(pattern("de.+"))); 
+
+        assertThat(selection.getRowCount(), is(equalTo(1)));
+        assertThat(selection.getData(1, "name"), is(equalTo("derek")));
     }
 
     @Test

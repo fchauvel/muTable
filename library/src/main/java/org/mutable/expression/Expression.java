@@ -51,10 +51,10 @@ public abstract class Expression {
     public final LogicalOr or(Expression right) {
         return new LogicalOr(this, right);
     }
-    
+
     /**
      * Logical implication of this expression and the given one
-     * 
+     *
      * @param right operand of the logical expression
      * @return the logical implication
      */
@@ -95,15 +95,24 @@ public abstract class Expression {
         return new IsBelow(this, right);
     }
 
-    // Helper for converting operands
+    /**
+     * Regular expression (R.E.) matching test
+     *
+     * @param pattern a literal containing the text of the R.E. to test
+     * @return the Regex test object
+     */
+    public final RegexMatch matches(Expression pattern) {
+        return new RegexMatch(this, pattern);
+    }
 
+    // Helper for converting operands
     protected Boolean asBoolean(Object value) {
         if (value instanceof Boolean) {
             return (Boolean) value;
         }
 
-        final String error 
-                = String.format("Illegal operand tyoe (should be java.lang.Boolean, but found '%s')", 
+        final String error
+                = String.format("Illegal operand tyoe (should be java.lang.Boolean, but found '%s')",
                         value.getClass().getName());
         throw new IllegalArgumentException(error);
     }
@@ -119,6 +128,18 @@ public abstract class Expression {
                         value.getClass().getName());
 
         throw new RuntimeException(error);
+    }
+
+    protected String asString(Object value) {
+        if (value instanceof String) {
+            return (String) value;
+        }
+
+        final String errorMessage
+                = String.format("Invalid operand type (expected '%s' but found '%s')",
+                        String.class.getName(),
+                        value.getClass().getName());
+        throw new IllegalArgumentException(errorMessage);
     }
 
 }
