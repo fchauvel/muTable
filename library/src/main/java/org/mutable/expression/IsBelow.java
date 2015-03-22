@@ -28,7 +28,7 @@ import org.mutable.Row;
 /**
  * the 'less than' comparison operator
  */
-public class IsBelow extends NumericalComparison {
+public class IsBelow extends BinaryExpression {
 
     public IsBelow(Expression leftOperand, Expression rightOperand) {
         super(leftOperand, rightOperand);
@@ -36,8 +36,8 @@ public class IsBelow extends NumericalComparison {
 
     @Override
     public Object evaluate(Row row) {
-        Comparable left = asComparable(getLeftOperand().evaluate(row), LEFT_OPERAND);
-        Comparable right = asComparable(getRightOperand().evaluate(row), RIGHT_OPERAND);
+        Comparable left = asComparable(getLeftOperand().evaluate(row));
+        Comparable right = asComparable(getRightOperand().evaluate(row));
         return left.compareTo(right) < 0;
     }
     

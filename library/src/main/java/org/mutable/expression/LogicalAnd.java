@@ -36,13 +36,4 @@ public class LogicalAnd extends BinaryExpression {
         return leftValue && rightValue;
     }
 
-    private Boolean asBoolean(Object value) {
-        if (value instanceof Boolean) {
-            return (Boolean) value;
-        }
-
-        final String error = String.format("Illegal operand tyoe in conjunction (should be Boolean, but found '%s')", value.getClass().getName());
-        throw new IllegalArgumentException(error);
-    }
-
 }

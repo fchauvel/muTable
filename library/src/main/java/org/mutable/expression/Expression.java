@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with MuTable. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.mutable.expression;
 
 import org.mutable.Row;
@@ -84,6 +83,29 @@ public abstract class Expression {
      */
     public final IsBelow isBelow(Expression right) {
         return new IsBelow(this, right);
+    }
+
+    // Helper for converting operands
+    protected Boolean asBoolean(Object value) {
+        if (value instanceof Boolean) {
+            return (Boolean) value;
+        }
+
+        final String error = String.format("Illegal operand tyoe (should be java.lang.Boolean, but found '%s')", value.getClass().getName());
+        throw new IllegalArgumentException(error);
+    }
+
+    protected Comparable asComparable(Object value) throws RuntimeException {
+        if (value instanceof Comparable) {
+            return (Comparable) value;
+        }
+
+        final String error
+                = String.format("Invalid %s operand (expecting '%s' but found '%s')",
+                        Comparable.class.getName(),
+                        value.getClass().getName());
+
+        throw new RuntimeException(error);
     }
 
 }
