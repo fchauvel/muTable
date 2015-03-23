@@ -78,7 +78,7 @@ public class ExpressionTest {
 
     @Test
     public void regexMatchingShouldEvaluateProperly() {
-        Table selection = employees.where(field("name").matches(pattern("de.+"))); 
+        Table selection = employees.where(field("name").matches(pattern("de.+")));
 
         assertThat(selection.getRowCount(), is(equalTo(1)));
         assertThat(selection.getData(1, "name"), is(equalTo("derek")));
@@ -99,6 +99,14 @@ public class ExpressionTest {
 
         assertThat(selection.getRowCount(), is(equalTo(1)));
         assertThat(selection.getData(1, "name"), is(equalTo("derek")));
+    }
+
+    @Test
+    public void isWithinShouldEvaluateProperly() {
+        Table selection = employees.where(field("salary").isCloseTo(value(34D)).by(0.5));
+
+        assertThat(selection.getRowCount(), is(equalTo(1)));
+        assertThat(selection.getData(1, "name"), is(equalTo("john")));
     }
 
 }

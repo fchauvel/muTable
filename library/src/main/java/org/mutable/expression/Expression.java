@@ -95,6 +95,16 @@ public abstract class Expression {
     public final IsBelow isBelow(Expression right) {
         return new IsBelow(this, right);
     }
+    
+    
+    /**
+     * Range comparison. Check whether the two operand are within a range
+     * @param right the right operand
+     * @return the range comparison test
+     */
+    public final CloseTo isCloseTo(Expression right) {
+        return new CloseTo(this, right);
+    }
 
     /**
      * Regular expression (R.E.) matching test
