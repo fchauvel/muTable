@@ -95,10 +95,10 @@ public abstract class Expression {
     public final IsBelow isBelow(Expression right) {
         return new IsBelow(this, right);
     }
-    
-    
+
     /**
      * Range comparison. Check whether the two operand are within a range
+     *
      * @param right the right operand
      * @return the range comparison test
      */
@@ -117,39 +117,34 @@ public abstract class Expression {
     }
 
     // Helper for converting operands
+    
     protected Boolean asBoolean(Object value) {
-        if (value instanceof Boolean) {
-            return (Boolean) value;
-        }
-
-        final String error
-                = String.format("Invalid operand tyoe (should be java.lang.Boolean, but found '%s')",
-                        value.getClass().getName());
-        throw new IllegalArgumentException(error);
+        return as(value, Boolean.class);
     }
 
     protected Comparable asComparable(Object value) throws RuntimeException {
-        if (value instanceof Comparable) {
-            return (Comparable) value;
-        }
-
-        final String error
-                = String.format("Invalid operand type (expecting '%s' but found '%s')",
-                        Comparable.class.getName(),
-                        value.getClass().getName());
-
-        throw new RuntimeException(error);
+        return as(value, Comparable.class);
     }
 
     protected String asString(Object value) {
-        if (value instanceof String) {
-            return (String) value;
+        return as(value, String.class);
+    }
+
+    protected Number asNumber(Object value) {
+        return as(value, Number.class);
+    }
+
+    protected <T> T as(Object value, Class<T> type) {
+        if (type.isAssignableFrom(value.getClass())) {
+            return (T) value;
         }
 
         final String errorMessage
-                = String.format("Invalid operand type (expected '%s' but found '%s')",
-                        String.class.getName(),
-                        value.getClass().getName());
+                = String.format(
+                        "Invalid operand type (expecting '%s', but found '%s')",
+                        type.getName(),
+                        value.getClass().getName()
+                );
         throw new IllegalArgumentException(errorMessage);
     }
 

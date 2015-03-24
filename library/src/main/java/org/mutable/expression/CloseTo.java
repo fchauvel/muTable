@@ -45,13 +45,6 @@ public class CloseTo extends BinaryExpression {
         return delta.compareTo(tolerance) < 0;
     }
 
-    private Number asNumber(Object value) {
-        if (value instanceof Number) {
-            return (Number) value;
-        }
-        
-        final String errorMessage = String.format("Invalid operand type (expecting java.lang.Number, but foudn '%s')", value.getClass().getName());
-        throw new IllegalArgumentException(errorMessage);
-    }
+   
 
 }
