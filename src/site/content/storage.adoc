@@ -1,0 +1,51 @@
+= Table Storage
+Franck Chauvel
+2015-03-23
+:jbake-type: page
+:jbake-tags: documentation, manual
+:jbake-status: published
+
+&mu;Table has been design to store data tables in several data formats. In the current 
+version, it only supports CSV. The format is important for both loading and saving 
+tables on disk.
+
+== Loading Tables
+
+By default, the format used to load a table is computed based on the name (or the URL) or 
+the resource to load. In the following example, the CSV 'codec' is selected automatically 
+based on the extension of the given file (i.e., '.csv').
+
+[source,java]
+----
+try {
+	String resource = "/home/franck/invoices.csv";
+	long timeout = 2000L;
+	storage().fetch(resource, timeout);
+       
+} catch (FileNotFoundException ex) {
+    Logger.getLogger(Runner.class.getName()).log(Level.SEVERE, null, ex);
+        
+}
+----
+
+Note that the timeout specified in the above example is optional. By default the timeout is set to 1 s.
+In addition, if the format of the content cannot be deduced from the URL (or the file name), you can also explicitly 
+specify the format you expect.
+
+
+== Storing Tables
+
+Similarly, it is possible to store an existing table on disk, using various formats. The 
+`store` method of the storage object.
+
+[source,java]
+----
+Table myTable = ... //
+try {
+	storage().store(myTable, "/home/franck/invoices.csv");
+       
+} catch (FileNotFoundException ex) {
+    Logger.getLogger(Runner.class.getName()).log(Level.SEVERE, null, ex);
+        
+}
+----
