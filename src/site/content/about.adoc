@@ -1,0 +1,19 @@
+= About
+Franck Chauvel
+2015-03-25
+:jbake-type: page
+:jbake-tags: documentation, manual
+:jbake-status: published
+
+&mu;Table is a Java internal DSL for manipulating in memory data tables (such as data loaded from 
+CSV files). It helps improve the readability of the code, for instance when it is used in unit test. 
+
+Here are some facts about &mu;Table:
+
+[horizontal]
+Author:: Franck Chauvel
+License:: LGPL v3
+Inception Year:: 2011
+
+
+

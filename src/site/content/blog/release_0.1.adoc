@@ -1,0 +1,8 @@
+= &mu;Table 0.1 available soon!
+Franck Chauvel
+2015-03-25
+:jbake-type: post
+:jbake-tags: news
+:jbake-status: published
+
+A first release of &mu;Table will soon be available!
