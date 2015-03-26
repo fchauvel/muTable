@@ -19,7 +19,7 @@
 package org.mutable.expression;
 
 /**
- * Binary operators, such as AND, OR, ==, <=, etc.
+ * Binary operators, such as AND, OR, equality tests
  */
 public abstract class BinaryExpression extends Expression {
 

@@ -75,7 +75,7 @@ public abstract class Expression {
     }
 
     /**
-     * GreaterThan (>) comparison operator
+     * Superiority comparison operator
      *
      * @param right the right operand of the operator (this expression for
      * equality operator)
@@ -86,7 +86,7 @@ public abstract class Expression {
     }
 
     /**
-     * LessThan (<) comparison operator
+     * Inferiority comparison operator
      *
      * @param right the right operand of the operator (this expression for
      * equality operator)
