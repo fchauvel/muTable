@@ -17,6 +17,7 @@ allprojects {
     apply plugin: 'findbugs'
     apply plugin: 'pmd'
     apply plugin: 'license'
+    apply plugin: 'maven-publish'
 
     
     repositories {
@@ -68,3 +69,4 @@ task updateCoverageBadge << {
         println("Coverage=" + matcher[0][3])
     }
 }
+

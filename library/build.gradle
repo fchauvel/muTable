@@ -21,4 +21,22 @@ license {
     ext.email = 'franck.chauvel@gmail.com'
 }
 
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId 'org.fchauvel.mutable'
+            artifactId 'core'
+            version version
+            
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            // change to point to your repo, e.g. http://my.org/repo
+            url "$buildDir/repo"
+        }
+    }
+}
+
 
