@@ -82,12 +82,12 @@ tables on disk.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>By default, the format used to load a table is computed based on the name (or the URL) or
-the resource to load. In the following example, the CSV 'codec' is selected automatically
-based on the extension of the given file (i.e., '.csv').</p>
+the resource to load. In the following example, the CSV <em>codec</em> is selected automatically
+based on the extension of the given file (i.e., <em>.csv</em>).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">try {
+<pre class="prettyprint java language-java"><code>try {
 	String resource = "/home/franck/invoices.csv";
 	long timeout = 2000L;
 	storage().fetch(resource, timeout);
@@ -114,7 +114,7 @@ specify the format you expect.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Table myTable = ... //
+<pre class="prettyprint java language-java"><code>Table myTable = ... //
 try {
 	storage().store(myTable, "/home/franck/invoices.csv");
 
@@ -135,7 +135,7 @@ try {
     
     <div id="footer">
       <div class="container">
-        <p class="muted credit">&copy; 2014 | Mixed with <a href="http://getbootstrap.com/">Bootstrap v3.1.1</a> | Baked with <a href="http://jbake.org">JBake v2.3.2</a></p>
+        <p class="muted credit">&copy; 2014 | Mixed with <a href="http://getbootstrap.com/">Bootstrap v3.1.1</a> | Baked with <a href="http://jbake.org">JBake v2.3.0</a></p>
       </div>
     </div>
     

@@ -68,17 +68,19 @@
 
 	<p><em>25 March 2015</em></p>
 
-	<p><div class="paragraph">
+	<p><div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
 <p>&mu;Table is, in the first place, a tiny internal Java DSL to manipulate and especially filter data tables, such as CSV files.
 Consider the following data presented in Table <a href="#buddies_table">A sample data table</a> assuming that it is available as the file <code>buddies.csv</code>.</p>
 </div>
-<table id="buddies_table" class="tableblock frame-all grid-all spread">
+<table id="buddies_table" class="tableblock frame-all grid-all" style="width:100%; ">
 <caption class="title">Table 1. A sample data table</caption>
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
+<col style="width:25%;">
+<col style="width:25%;">
+<col style="width:25%;">
+<col style="width:25%;"> 
 </colgroup>
 <thead>
 <tr>
@@ -109,24 +111,25 @@ Consider the following data presented in Table <a href="#buddies_table">A sample
 </tr>
 </tbody>
 </table>
+
 <div class="paragraph">
 <p>&mu;Table let you easily filter or query such a table, using the <code>where</code> operation, which accepts your query as an <code>Expression</code> object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Table buddies = storage().fetch("buddies.csv");
+<pre class="prettyprint java language-java"><code>Table buddies = storage().fetch("buddies.csv");
 Table selection = buddies.where(field("score").isAbove(value(30)))</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p><a href="#operators">&mu;Table query operators</a> lists all the operators that are currently provided by &mu;Table for filtering a table.</p>
 </div>
-<table id="operators" class="tableblock frame-all grid-all spread">
+<table id="operators" class="tableblock frame-all grid-all" style="width:100%; ">
 <caption class="title">Table 2. &mu;Table query operators</caption>
 <colgroup>
-<col style="width: 33%;">
-<col style="width: 33%;">
-<col style="width: 33%;">
+<col style="width:33%;">
+<col style="width:33%;">
+<col style="width:33%;"> 
 </colgroup>
 <thead>
 <tr>
@@ -182,7 +185,10 @@ Table selection = buddies.where(field("score").isAbove(value(30)))</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>field("score").isAbove(value(30D)).implies(field("isMarried").is(value(false)))</code></p></td>
 </tr>
 </tbody>
-</table></p>
+</table>
+
+</div>
+</div></p>
 
 	<hr />
 
@@ -192,7 +198,7 @@ Table selection = buddies.where(field("score").isAbove(value(30)))</code></pre>
     
     <div id="footer">
       <div class="container">
-        <p class="muted credit">&copy; 2014 | Mixed with <a href="http://getbootstrap.com/">Bootstrap v3.1.1</a> | Baked with <a href="http://jbake.org">JBake v2.3.2</a></p>
+        <p class="muted credit">&copy; 2014 | Mixed with <a href="http://getbootstrap.com/">Bootstrap v3.1.1</a> | Baked with <a href="http://jbake.org">JBake v2.3.0</a></p>
       </div>
     </div>
     
