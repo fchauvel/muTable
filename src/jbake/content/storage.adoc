@@ -5,7 +5,7 @@ Franck Chauvel
 :jbake-tags: documentation, manual
 :jbake-status: published
 
-&mu;Table has been design to store data tables in several data formats. In the current 
+&mu;Table has been designed to store data tables in several data formats. In the current 
 version, it only supports CSV. The format is important for both loading and saving 
 tables on disk.
 
@@ -23,12 +23,12 @@ try {
 	storage().fetch(resource, timeout);
        
 } catch (FileNotFoundException ex) {
-    Logger.getLogger(Runner.class.getName()).log(Level.SEVERE, null, ex);
+    // Handle the case where the file cannot be found
         
 }
 ----
 
-Note that the timeout specified in the above example is optional. By default the timeout is set to 1 s.
+Note that the timeout specified in the above example is optional. By default this timeout is set to 1 s.
 In addition, if the format of the content cannot be deduced from the URL (or the file name), you can also explicitly 
 specify the format you expect.
 

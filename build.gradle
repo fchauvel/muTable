@@ -75,8 +75,6 @@ allprojects {
         
 }
 
-apply plugin: 'me.champeau.jbake'
-//apply plugin: 'github-pages'                        
 
 
 
@@ -89,6 +87,14 @@ project(':sample') {
 task wrapper(type: Wrapper) {
     gradleVersion = '2.2.1'
 }
+
+apply plugin: 'me.champeau.jbake'
+
+task publishDoc(type: GradleBuild) {           
+    buildFile = 'publish.gradle'
+    tasks = ['publishGhPages']
+}
+
 
 task updateCoverageBadge << {
     def coverageReport = new File("library/build/reports/jacoco/test/html/index.html")
