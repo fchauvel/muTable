@@ -4,25 +4,34 @@
 
 &mu;Table is a tiny Java library to ease the manipulation of data
 table. Languages like R for instance provides very convenient data
-structure, which fasten the assembly small numerical experiments. The
-aims of µTable is to bring the same in Java. See the example below:
+structure, which speed up assembling small numerical experiments, in a research
+setting for instance. The aims of µTable is to bring the same in Java, as shown in the example below:
 
 [source, java]
 ----
+// We load a file from the Internet
 Table table = storage().fetch("http://samples.com/employee.csv");
+
+// Let's filter its contents
 for(Row eachRow: table.where(field("isMarried").is(value(false)))) {
 	System.out.println(eachRow.getField("name"));
 }
 ----
 
+== Releases
+We are working on the *release v0.1*, which will be available soon! You will then 
+find the released binaries / distribution from link:https://github.com/fchauvel/muTable/releases[here]
+
+
 == Documentation
 
-The documentation is available for each released version.
-
- * link:http://fchauvel.github.io/mutable/0.1-SNAPSHOT/index.html[0.1-SNAPSHOT]
+The documentation is available for each released version. It includes both the 
+API as well as more general documentation such as tutorial and examples.
+ 
+* link:http://fchauvel.github.io/muTable/0.1-SNAPSHOT/index.html[0.1-SNAPSHOT]
 
 == Contact
 
-Please report any bugs, issues or feature request using the link:https://github.com/fchauvel/mutable/issues[issue tracker].
+If you get the change to give it a try, please report any bugs, issues or feature request using the link:https://github.com/fchauvel/muTable/issues[issue tracker].
 Should you need any further information, feel free to email mailto:franck.chauvel@gmail.com[me]
 
