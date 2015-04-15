@@ -215,7 +215,7 @@ p a > code:hover { color: #561309; }
 #content #toc > :last-child { margin-bottom: 0; }
 #content #toc a { text-decoration: none; }
 
-#content #toctitle { font-weight: bold; font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif; font-size: 1em; padding-left: 0.125em; }
+#content #toctitle { font-weight: bold; font-family: "Times New Roman", Georgia, Serif; font-size: 1em; padding-left: 0.125em; }
 
 #footer { max-width: 100%; background-color: #222222; padding: 1.25em; }
 
