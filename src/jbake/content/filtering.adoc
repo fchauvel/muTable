@@ -1,0 +1,46 @@
+= Filtering Tables
+Franck Chauvel
+2015-03-25
+:jbake-type: page
+:jbake-tags: documentation, manual
+:jbake-status: published
+
+&mu;Table is, in the first place, a tiny internal Java DSL to manipulate and especially filter data tables, such as CSV files. 
+Consider the following data presented in Table <<buddies_table>> assuming that it is available as the file `buddies.csv`.
+
+[[buddies_table]]
+.A sample data table
+[options="header"]
+|=======================
+|name   |age |isMarried |score
+|Bob    |25  |true      |23.54
+|John   |34  |false     |34.45
+|Derek  |56  |false     |67.34
+|=======================
+
+&mu;Table let you easily filter or query such a table, using the `where` operation, which accepts your query as an `Expression` object.
+
+[source,java]
+----
+Table buddies = storage().fetch("buddies.csv");
+Table selection = buddies.where(field("score").isAbove(value(30)))
+----
+
+<<operators>> lists all the operators that are currently provided by &mu;Table for filtering a table.
+
+[[operators]]
+.&mu;Table query operators
+[options="header"]
+|=======================
+|operator    |syntax     | Example
+|equality    |.is()      |`field("name").is(value("derek"))`
+|superiority |.isAbove() | `field("score").isAbove(value(30D))`
+|inferiority |.isBelow() | `field("score").isBelow(value(30D"))`
+|delta       |.isCloseTo().by() | `field("score").isCloseTo(value(30D)).by(1e-6)`
+|regex		 |.matches(pattern()) | `field("name").matches(pattern("joh.+"))`
+|conjunction | .and()    | `field("score").isAbove(value(30D)).and(field("isMarried").is(value(false)))`
+|disjunction | .or()     | `field("score").isAbove(value(30D)).or(field("isMarried").is(value(false)))`
+|negation    | not()     |`not(field("score").isAbove(value(30D)))`
+|implication | .implies() | `field("score").isAbove(value(30D)).implies(field("isMarried").is(value(false)))`
+|=======================
+

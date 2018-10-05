@@ -1,0 +1,106 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        mavenLocal()
+    }   
+    
+    dependencies {
+        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
+        classpath 'me.champeau.gradle:jbake-gradle-plugin:0.2' 
+        classpath 'org.asciidoctor:asciidoctor-java-integration:0.1.4'  
+        classpath 'org.freemarker:freemarker:2.3.19'   
+        classpath 'org.ajoberstar:gradle-git:0.6.3'      }
+}
+
+plugins {
+    id 'pl.allegro.tech.build.axion-release' version '1.2.2'
+}
+
+scmVersion {
+    tag {
+        prefix = 'muTable'
+    }
+    
+    repository {
+        type = 'git' // type of repository
+        directory = project.rootProject.file('./') // repository location
+        remote = 'origin' // remote name
+
+    }
+}
+
+allprojects {
+    
+    
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+    apply plugin: 'findbugs'
+    apply plugin: 'pmd'
+    apply plugin: 'license'
+    apply plugin: 'maven-publish'
+
+    project.version = scmVersion.version
+    
+    group = 'org.mutable'
+        
+    repositories {
+        jcenter()
+    }
+     
+    dependencies {
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+    }
+    
+    tasks.withType(FindBugs) {
+        reports {
+            xml.enabled = false
+            html.enabled = true
+        }
+    }
+    
+    task myJavadocs(type: Javadoc) {
+        source = sourceSets.main.allJava
+    }
+    
+    jacocoTestReport {
+        group = "Reporting"
+        description = "Generate Jacoco coverage reports after running tests."
+        additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+        reports {
+            xml.enabled false
+            csv.enabled true
+        }
+    }
+        
+}
+
+
+
+
+project(':sample') {
+    dependencies {
+        compile project(':library')
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2.1'
+}
+
+apply plugin: 'me.champeau.jbake'
+
+task publishDoc(type: GradleBuild) {           
+    buildFile = 'publish.gradle'
+    tasks = ['publishGhPages']
+}
+
+
+task updateCoverageBadge << {
+    def coverageReport = new File("library/build/reports/jacoco/test/html/index.html")
+    coverageReport.eachLine {
+        def matcher = (it =~ /Total<\/td><td class="bar">([0-9,]+) of ([0-9,]+)<\/td><td class="ctr2">([0-9]+)%<\/td>/ )
+        println("Coverage=" + matcher[0][3])
+    }
+}
+

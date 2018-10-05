@@ -1,0 +1,15 @@
+
+# NetBeans
+.nb-gradle-properties
+
+# Gradle
+.gradle
+build/
+.nb-gradle
+
+# Emacs
+*~
+\#*\#
+
+# jbake
+src/site/output*
