@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Table Storage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/asciidoctor.css" rel="stylesheet">
+    <link href="css/base.css" rel="stylesheet">
+    <link href="css/prettify.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!--<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">-->
+    <link rel="shortcut icon" href="favicon.ico">
+  </head>
+  <body onload="prettyPrint()">
+    <div id="wrap">
+
+	<!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="">&mu;Table</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="index.html">News</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="storage.html">Loading and storing tables</a></li>
+                <li><a href="filtering.html">Filtering rows</a></li>
+                <li><a href="#">Traversing</a></li>
+                <li class="divider"></li>
+                <li><a href="#">API</a></li>
+              </ul>
+            </li>
+			<li><a href="about.html">About</a></li>
+            
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    <div class="container">	
+	<div class="page-header">
+		<h1>Table Storage</h1>
+	</div>
+
+	<p><em>23 March 2015</em></p>
+
+	<p><div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>&mu;Table has been designed to store data tables in several data formats. In the current
+version, it only supports CSV. The format is important for both loading and saving
+tables on disk.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_loading_tables">Loading Tables</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>By default, the format used to load a table is computed based on the name (or the URL) or
+the resource to load. In the following example, the CSV <em>codec</em> is selected automatically
+based on the extension of the given file (i.e., <em>.csv</em>).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint java language-java"><code>try {
+	String resource = "/home/franck/invoices.csv";
+	long timeout = 2000L;
+	storage().fetch(resource, timeout);
+
+} catch (FileNotFoundException ex) {
+    // Handle the case where the file cannot be found
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that the timeout specified in the above example is optional. By default this timeout is set to 1 s.
+In addition, if the format of the content cannot be deduced from the URL (or the file name), you can also explicitly
+specify the format you expect.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_storing_tables">Storing Tables</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Similarly, it is possible to store an existing table on disk, using various formats. The
+<code>store</code> method of the storage object.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint java language-java"><code>Table myTable = ... //
+try {
+	storage().store(myTable, "/home/franck/invoices.csv");
+
+} catch (FileNotFoundException ex) {
+    Logger.getLogger(Runner.class.getName()).log(Level.SEVERE, null, ex);
+
+}</code></pre>
+</div>
+</div>
+</div>
+</div></p>
+
+	<hr />
+
+		</div>
+		<div id="push"></div>
+    </div>
+    
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">&copy; 2014 | Mixed with <a href="http://getbootstrap.com/">Bootstrap v3.1.1</a> | Baked with <a href="http://jbake.org">JBake v2.3.0</a></p>
+      </div>
+    </div>
+    
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/prettify.js"></script>
+    
+  </body>
+</html>

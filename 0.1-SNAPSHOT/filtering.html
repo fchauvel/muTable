@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Filtering Tables</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/asciidoctor.css" rel="stylesheet">
+    <link href="css/base.css" rel="stylesheet">
+    <link href="css/prettify.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!--<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">-->
+    <link rel="shortcut icon" href="favicon.ico">
+  </head>
+  <body onload="prettyPrint()">
+    <div id="wrap">
+
+	<!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="">&mu;Table</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="index.html">News</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="storage.html">Loading and storing tables</a></li>
+                <li><a href="filtering.html">Filtering rows</a></li>
+                <li><a href="#">Traversing</a></li>
+                <li class="divider"></li>
+                <li><a href="#">API</a></li>
+              </ul>
+            </li>
+			<li><a href="about.html">About</a></li>
+            
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    <div class="container">	
+	<div class="page-header">
+		<h1>Filtering Tables</h1>
+	</div>
+
+	<p><em>25 March 2015</em></p>
+
+	<p><div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>&mu;Table is, in the first place, a tiny internal Java DSL to manipulate and especially filter data tables, such as CSV files.
+Consider the following data presented in Table <a href="#buddies_table">A sample data table</a> assuming that it is available as the file <code>buddies.csv</code>.</p>
+</div>
+<table id="buddies_table" class="tableblock frame-all grid-all" style="width:100%; ">
+<caption class="title">Table 1. A sample data table</caption>
+<colgroup>
+<col style="width:25%;">
+<col style="width:25%;">
+<col style="width:25%;">
+<col style="width:25%;"> 
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">name</th>
+<th class="tableblock halign-left valign-top">age</th>
+<th class="tableblock halign-left valign-top">isMarried</th>
+<th class="tableblock halign-left valign-top">score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bob</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">25</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">23.54</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">John</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">34</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">34.45</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Derek</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">56</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">67.34</p></td>
+</tr>
+</tbody>
+</table>
+
+<div class="paragraph">
+<p>&mu;Table let you easily filter or query such a table, using the <code>where</code> operation, which accepts your query as an <code>Expression</code> object.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint java language-java"><code>Table buddies = storage().fetch("buddies.csv");
+Table selection = buddies.where(field("score").isAbove(value(30)))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="#operators">&mu;Table query operators</a> lists all the operators that are currently provided by &mu;Table for filtering a table.</p>
+</div>
+<table id="operators" class="tableblock frame-all grid-all" style="width:100%; ">
+<caption class="title">Table 2. &mu;Table query operators</caption>
+<colgroup>
+<col style="width:33%;">
+<col style="width:33%;">
+<col style="width:33%;"> 
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">operator</th>
+<th class="tableblock halign-left valign-top">syntax</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">equality</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">.is()</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>field("name").is(value("derek"))</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">superiority</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">.isAbove()</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>field("score").isAbove(value(30D))</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">inferiority</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">.isBelow()</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>field("score").isBelow(value(30D"))</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">delta</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">.isCloseTo().by()</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>field("score").isCloseTo(value(30D)).by(1e-6)</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">regex</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">.matches(pattern())</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>field("name").matches(pattern("joh.+"))</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">conjunction</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">.and()</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>field("score").isAbove(value(30D)).and(field("isMarried").is(value(false)))</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">disjunction</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">.or()</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>field("score").isAbove(value(30D)).or(field("isMarried").is(value(false)))</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">negation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">not()</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>not(field("score").isAbove(value(30D)))</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">implication</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">.implies()</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>field("score").isAbove(value(30D)).implies(field("isMarried").is(value(false)))</code></p></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div></p>
+
+	<hr />
+
+		</div>
+		<div id="push"></div>
+    </div>
+    
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">&copy; 2014 | Mixed with <a href="http://getbootstrap.com/">Bootstrap v3.1.1</a> | Baked with <a href="http://jbake.org">JBake v2.3.0</a></p>
+      </div>
+    </div>
+    
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/prettify.js"></script>
+    
+  </body>
+</html>
